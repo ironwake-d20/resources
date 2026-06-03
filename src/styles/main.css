@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+@import '@catppuccin/tailwindcss/mocha.css';
+
+/* Override dark variant to be class-based, so the media query in mocha.css
+   is neutralized. The .mocha class on <html> drives the color swap instead. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+}
