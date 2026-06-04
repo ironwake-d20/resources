@@ -36,7 +36,11 @@ export default function DiceRoller() {
             type="number"
             min={1}
             value={count}
-            onChange={(e) => setCount(clampInt(e.target.value, 1, 1))}
+            onChange={(e) => {
+              const newCount = clampInt(e.target.value, 1, 1)
+              setCount(newCount)
+              if (keepCount > newCount) setKeepCount(newCount)
+            }}
             className={inputClass}
           />
           <span className="text-sm text-ctp-subtext1">d</span>
