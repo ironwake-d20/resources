@@ -4,6 +4,7 @@ import AppHeader from './components/layout/AppHeader'
 import AppFooter from './components/layout/AppFooter'
 import Home from './components/Home'
 import DiceRoller from './components/tools/DiceRoller'
+import CharacterSheet from './components/tools/CharacterSheet'
 
 export default function App() {
   const [dark, setDark] = useState(() => {
@@ -24,6 +25,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dice-roller" element={<DiceRoller />} />
+          <Route path="/character-sheet" element={<CharacterSheet />} />
         </Routes>
       </main>
       <AppFooter />

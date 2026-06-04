@@ -15,6 +15,12 @@ const tools: Tool[] = [
     description: 'Roll and keep dice for any purpose.',
     href: '/dice-roller',
   },
+  {
+    emoji: '📜',
+    title: 'Character Sheet',
+    description: 'Create and manage character sheets for your campaign.',
+    href: '/character-sheet',
+  },
 ]
 
 export default function Home() {
