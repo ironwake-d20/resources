@@ -1,16 +1,21 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 interface AppHeaderProps {
-  dark: boolean
-  onToggleDark: () => void
+  dark: boolean;
+  onToggleDark: () => void;
 }
 
 export default function AppHeader({ dark, onToggleDark }: AppHeaderProps) {
   return (
     <header className="bg-ctp-mantle border-b border-ctp-surface0 px-6 py-3 flex items-center justify-between">
-      <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+      <Link
+        to="/"
+        className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+      >
         <span className="text-2xl leading-none">⚔️</span>
-        <span className="text-lg font-semibold text-ctp-mauve">Ironwake Resources</span>
+        <span className="text-lg font-semibold text-ctp-mauve">
+          Ironwake Resources
+        </span>
       </Link>
       <button
         onClick={onToggleDark}
@@ -20,5 +25,5 @@ export default function AppHeader({ dark, onToggleDark }: AppHeaderProps) {
         {dark ? '☀️' : '🌙'}
       </button>
     </header>
-  )
+  );
 }

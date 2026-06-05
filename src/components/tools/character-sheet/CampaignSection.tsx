@@ -1,9 +1,9 @@
-import type { Campaign } from '../../../campaigns/types'
-import { labelClass, selectClass } from './styles'
+import type { Campaign } from '../../../campaigns/types';
+import { labelClass, selectClass } from './styles';
 
 interface Props {
-  campaign: Campaign
-  onChange: (campaign: Campaign) => void
+  campaign: Campaign;
+  onChange: (campaign: Campaign) => void;
 }
 
 export default function CampaignSection({ campaign, onChange }: Props) {
@@ -22,5 +22,5 @@ export default function CampaignSection({ campaign, onChange }: Props) {
         </select>
       </div>
     </section>
-  )
+  );
 }

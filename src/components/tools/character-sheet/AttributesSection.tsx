@@ -1,16 +1,21 @@
-import { useEffect, useState } from 'react'
-import type { RacialBonus } from '../../../campaigns/types'
-import { labelClass, selectClass } from './styles'
+import { useState } from 'react';
+import type { RacialBonus } from '../../../campaigns/types';
+import { labelClass, selectClass } from './styles';
 
-export type AttributeMethod = 'roll5d6k3' | 'roll4d6k3' | 'roll1d10p8' | 'standard' | 'pointbuy'
+export type AttributeMethod =
+  | 'roll5d6k3'
+  | 'roll4d6k3'
+  | 'roll1d10p8'
+  | 'standard'
+  | 'pointbuy';
 
 export interface Attributes {
-  str: number
-  dex: number
-  con: number
-  int: number
-  wis: number
-  cha: number
+  str: number;
+  dex: number;
+  con: number;
+  int: number;
+  wis: number;
+  cha: number;
 }
 
 const ATTRIBUTE_METHODS: { value: AttributeMethod; label: string }[] = [
@@ -19,7 +24,7 @@ const ATTRIBUTE_METHODS: { value: AttributeMethod; label: string }[] = [
   { value: 'roll1d10p8', label: 'Roll 1d10+8' },
   { value: 'standard', label: 'Standard Array' },
   { value: 'pointbuy', label: 'Point buy' },
-]
+];
 
 const ATTRIBUTE_LABELS: { key: keyof Attributes; label: string }[] = [
   { key: 'str', label: 'Strength' },
@@ -28,52 +33,52 @@ const ATTRIBUTE_LABELS: { key: keyof Attributes; label: string }[] = [
   { key: 'int', label: 'Intelligence' },
   { key: 'wis', label: 'Wisdom' },
   { key: 'cha', label: 'Charisma' },
-]
+];
 
-const STANDARD_ARRAY = [15, 14, 13, 12, 10, 8]
-const POINT_BUY_TOTAL = 27
+const STANDARD_ARRAY = [15, 14, 13, 12, 10, 8];
+const POINT_BUY_TOTAL = 27;
 
 interface RolledScore {
-  value: number
-  allDice: number[]
-  numKept: number
-  modifier: number
+  value: number;
+  allDice: number[];
+  numKept: number;
+  modifier: number;
 }
 
 const rowButtonClass =
-  'flex items-center justify-center w-4 h-4 rounded bg-ctp-surface1 border border-ctp-surface2 text-ctp-subtext1 hover:text-ctp-text hover:bg-ctp-surface2 transition-colors text-xs font-bold cursor-pointer select-none disabled:opacity-30 disabled:cursor-not-allowed'
+  'flex items-center justify-center w-4 h-4 rounded bg-ctp-surface1 border border-ctp-surface2 text-ctp-subtext1 hover:text-ctp-text hover:bg-ctp-surface2 transition-colors text-xs font-bold cursor-pointer select-none disabled:opacity-30 disabled:cursor-not-allowed';
 
 function modifier(score: number): string {
-  const mod = Math.floor((score - 10) / 2)
-  return mod >= 0 ? `+${mod}` : `${mod}`
+  const mod = Math.floor((score - 10) / 2);
+  return mod >= 0 ? `+${mod}` : `${mod}`;
 }
 
 function rollDie(sides: number): number {
-  return Math.floor(Math.random() * sides) + 1
+  return Math.floor(Math.random() * sides) + 1;
 }
 
 function sumTopN(dice: number[], n: number): number {
   return [...dice]
     .sort((a, b) => b - a)
     .slice(0, n)
-    .reduce((s, v) => s + v, 0)
+    .reduce((s, v) => s + v, 0);
 }
 
 function performRoll(method: AttributeMethod): RolledScore {
   if (method === 'roll5d6k3') {
-    const dice = Array.from({ length: 5 }, () => rollDie(6))
-    return { allDice: dice, numKept: 3, modifier: 0, value: sumTopN(dice, 3) }
+    const dice = Array.from({ length: 5 }, () => rollDie(6));
+    return { allDice: dice, numKept: 3, modifier: 0, value: sumTopN(dice, 3) };
   }
   if (method === 'roll4d6k3') {
-    const dice = Array.from({ length: 4 }, () => rollDie(6))
-    return { allDice: dice, numKept: 3, modifier: 0, value: sumTopN(dice, 3) }
+    const dice = Array.from({ length: 4 }, () => rollDie(6));
+    return { allDice: dice, numKept: 3, modifier: 0, value: sumTopN(dice, 3) };
   }
-  const die = rollDie(10)
-  return { allDice: [die], numKept: 1, modifier: 8, value: die + 8 }
+  const die = rollDie(10);
+  return { allDice: [die], numKept: 1, modifier: 8, value: die + 8 };
 }
 
 function RollTooltip({ score }: { score: RolledScore }) {
-  const sortedDice = [...score.allDice].sort((a, b) => b - a)
+  const sortedDice = [...score.allDice].sort((a, b) => b - a);
   return (
     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-ctp-surface1 border border-ctp-surface2 rounded-lg px-2 py-1.5 z-20 pointer-events-none flex gap-1 items-center shadow-lg whitespace-nowrap">
       {sortedDice.map((die, i) =>
@@ -85,33 +90,40 @@ function RollTooltip({ score }: { score: RolledScore }) {
             {die}
           </span>
         ) : (
-          <span key={i} className="text-ctp-subtext0 line-through text-xs px-0.5">
+          <span
+            key={i}
+            className="text-ctp-subtext0 line-through text-xs px-0.5"
+          >
             {die}
           </span>
-        )
+        ),
       )}
       {score.modifier > 0 && (
-        <span className="text-ctp-subtext1 text-xs ml-0.5">+{score.modifier}</span>
+        <span className="text-ctp-subtext1 text-xs ml-0.5">
+          +{score.modifier}
+        </span>
       )}
     </div>
-  )
+  );
 }
 
-type DragPayload = { source: 'pool'; value: number } | { source: 'attr'; attrKey: keyof Attributes }
+type DragPayload =
+  | { source: 'pool'; value: number }
+  | { source: 'attr'; attrKey: keyof Attributes };
 
 interface Props {
-  method: AttributeMethod
-  onMethodChange: (method: AttributeMethod) => void
-  attributes: Attributes
-  onAttributeChange: (key: keyof Attributes, value: number) => void
-  onAttributeSwap: (key1: keyof Attributes, key2: keyof Attributes) => void
-  racialBonus: RacialBonus
-  kaiLevel: number | ''
-  level: number
-  asis: Attributes
-  onAsiChange: (key: keyof Attributes, value: number) => void
-  conditions: Attributes
-  onConditionChange: (key: keyof Attributes, value: number) => void
+  method: AttributeMethod;
+  onMethodChange: (method: AttributeMethod) => void;
+  attributes: Attributes;
+  onAttributeChange: (key: keyof Attributes, value: number) => void;
+  onAttributeSwap: (key1: keyof Attributes, key2: keyof Attributes) => void;
+  racialBonus: RacialBonus;
+  kaiLevel: number | '';
+  level: number;
+  asis: Attributes;
+  onAsiChange: (key: keyof Attributes, value: number) => void;
+  conditions: Attributes;
+  onConditionChange: (key: keyof Attributes, value: number) => void;
 }
 
 export default function AttributesSection({
@@ -128,67 +140,68 @@ export default function AttributesSection({
   conditions,
   onConditionChange,
 }: Props) {
-  const [dragOverKey, setDragOverKey] = useState<keyof Attributes | null>(null)
-  const [rolledPool, setRolledPool] = useState<RolledScore[] | null>(null)
-  const [hoveredPoolIdx, setHoveredPoolIdx] = useState<number | null>(null)
+  const [dragOverKey, setDragOverKey] = useState<keyof Attributes | null>(null);
+  const [rolledPool, setRolledPool] = useState<RolledScore[] | null>(null);
+  const [hoveredPoolIdx, setHoveredPoolIdx] = useState<number | null>(null);
 
-  useEffect(() => {
-    setRolledPool(null)
-    setHoveredPoolIdx(null)
-  }, [method])
-
-  const isRollMethod = method === 'roll5d6k3' || method === 'roll4d6k3' || method === 'roll1d10p8'
-  const attrValues = Object.values(attributes)
-  const asiPool = Math.floor(level / 4)
-  const asiUsed = Object.values(asis).reduce((s, v) => s + v, 0)
-  const asiRemaining = asiPool - asiUsed
-  const availablePoolValues = STANDARD_ARRAY.filter((v) => !attrValues.includes(v))
-  const pointBuySpent = attrValues.reduce((sum, v) => sum + Math.max(0, v - 8), 0)
-  const pointBuyRemaining = POINT_BUY_TOTAL - pointBuySpent
+  const isRollMethod =
+    method === 'roll5d6k3' || method === 'roll4d6k3' || method === 'roll1d10p8';
+  const attrValues = Object.values(attributes);
+  const asiPool = Math.floor(level / 4);
+  const asiUsed = Object.values(asis).reduce((s, v) => s + v, 0);
+  const asiRemaining = asiPool - asiUsed;
+  const availablePoolValues = STANDARD_ARRAY.filter(
+    (v) => !attrValues.includes(v),
+  );
+  const pointBuySpent = attrValues.reduce(
+    (sum, v) => sum + Math.max(0, v - 8),
+    0,
+  );
+  const pointBuyRemaining = POINT_BUY_TOTAL - pointBuySpent;
 
   // Per-index availability for rolled pool (handles duplicate values correctly)
   const availableRolledIndices: boolean[] = rolledPool
     ? (() => {
-        const remaining = [...attrValues]
+        const remaining = [...attrValues];
         return rolledPool.map((score) => {
-          const idx = remaining.indexOf(score.value)
+          const idx = remaining.indexOf(score.value);
           if (idx !== -1) {
-            remaining.splice(idx, 1)
-            return false
+            remaining.splice(idx, 1);
+            return false;
           }
-          return true
-        })
+          return true;
+        });
       })()
-    : []
+    : [];
 
   function handleRollAll() {
-    const results = Array.from({ length: 6 }, () => performRoll(method))
-    results.sort((a, b) => b.value - a.value)
-    setRolledPool(results)
+    const results = Array.from({ length: 6 }, () => performRoll(method));
+    results.sort((a, b) => b.value - a.value);
+    setRolledPool(results);
   }
 
   function setDrag(e: React.DragEvent, payload: DragPayload) {
-    e.dataTransfer.setData('text/plain', JSON.stringify(payload))
-    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', JSON.stringify(payload));
+    e.dataTransfer.effectAllowed = 'move';
   }
 
   function getDrag(e: React.DragEvent): DragPayload | null {
     try {
-      return JSON.parse(e.dataTransfer.getData('text/plain'))
+      return JSON.parse(e.dataTransfer.getData('text/plain'));
     } catch {
-      return null
+      return null;
     }
   }
 
   function handleAttrDrop(e: React.DragEvent, targetKey: keyof Attributes) {
-    e.preventDefault()
-    setDragOverKey(null)
-    const payload = getDrag(e)
-    if (!payload) return
+    e.preventDefault();
+    setDragOverKey(null);
+    const payload = getDrag(e);
+    if (!payload) return;
     if (payload.source === 'pool') {
-      onAttributeChange(targetKey, payload.value)
+      onAttributeChange(targetKey, payload.value);
     } else if (payload.source === 'attr' && payload.attrKey !== targetKey) {
-      onAttributeSwap(payload.attrKey, targetKey)
+      onAttributeSwap(payload.attrKey, targetKey);
     }
   }
 
@@ -201,7 +214,11 @@ export default function AttributesSection({
           <label className={labelClass}>Generation Method</label>
           <select
             value={method}
-            onChange={(e) => onMethodChange(e.target.value as AttributeMethod)}
+            onChange={(e) => {
+              onMethodChange(e.target.value as AttributeMethod);
+              setRolledPool(null);
+              setHoveredPoolIdx(null);
+            }}
             className={selectClass}
           >
             {ATTRIBUTE_METHODS.map((m) => (
@@ -221,18 +238,21 @@ export default function AttributesSection({
               >
                 🎲 Roll
               </button>
-              {rolledPool && <span className={labelClass}>Drag values to attributes</span>}
+              {rolledPool && (
+                <span className={labelClass}>Drag values to attributes</span>
+              )}
             </div>
             {rolledPool && (
               <div className="flex gap-2">
                 {rolledPool.map((score, idx) => {
-                  const available = availableRolledIndices[idx]
+                  const available = availableRolledIndices[idx];
                   return (
                     <div
                       key={idx}
                       draggable={available}
                       onDragStart={(e) =>
-                        available && setDrag(e, { source: 'pool', value: score.value })
+                        available &&
+                        setDrag(e, { source: 'pool', value: score.value })
                       }
                       onMouseEnter={() => setHoveredPoolIdx(idx)}
                       onMouseLeave={() => setHoveredPoolIdx(null)}
@@ -246,7 +266,7 @@ export default function AttributesSection({
                       {score.value}
                       {hoveredPoolIdx === idx && <RollTooltip score={score} />}
                     </div>
-                  )
+                  );
                 })}
               </div>
             )}
@@ -277,15 +297,19 @@ export default function AttributesSection({
 
         {method === 'standard' && (
           <div className="col-span-12 flex flex-col gap-2">
-            <span className={labelClass}>Available values — drag to an attribute</span>
+            <span className={labelClass}>
+              Available values — drag to an attribute
+            </span>
             <div className="flex gap-2">
               {STANDARD_ARRAY.map((value) => {
-                const available = availablePoolValues.includes(value)
+                const available = availablePoolValues.includes(value);
                 return (
                   <div
                     key={value}
                     draggable={available}
-                    onDragStart={(e) => available && setDrag(e, { source: 'pool', value })}
+                    onDragStart={(e) =>
+                      available && setDrag(e, { source: 'pool', value })
+                    }
                     className={[
                       'flex items-center justify-center w-10 h-10 rounded-lg border text-sm font-bold select-none',
                       available
@@ -295,7 +319,7 @@ export default function AttributesSection({
                   >
                     {value}
                   </div>
-                )
+                );
               })}
             </div>
           </div>
@@ -303,31 +327,42 @@ export default function AttributesSection({
 
         <div className="col-span-12 grid grid-cols-3 gap-3">
           {ATTRIBUTE_LABELS.map(({ key, label }) => {
-            const base = attributes[key]
-            const kaiBonus = kaiLevel !== '' ? Math.max(0, (kaiLevel as number) - base) : 0
-            const racialBonusForAttr = racialBonus[key] ?? 0
-            const asiForAttr = asis[key]
-            const conditionForAttr = conditions[key]
-            const finalScore = base + kaiBonus + racialBonusForAttr + asiForAttr + conditionForAttr
-            const isOver = dragOverKey === key
-            const baseDecDisabled = method !== 'pointbuy' || base <= 8
-            const baseIncDisabled = method !== 'pointbuy' || base >= 18 || pointBuyRemaining === 0
-            const asiDecDisabled = asiForAttr <= 0
-            const asiIncDisabled = asiRemaining <= 0
+            const base = attributes[key];
+            const kaiBonus =
+              kaiLevel !== '' ? Math.max(0, (kaiLevel as number) - base) : 0;
+            const racialBonusForAttr = racialBonus[key] ?? 0;
+            const asiForAttr = asis[key];
+            const conditionForAttr = conditions[key];
+            const finalScore =
+              base +
+              kaiBonus +
+              racialBonusForAttr +
+              asiForAttr +
+              conditionForAttr;
+            const isOver = dragOverKey === key;
+            const baseDecDisabled = method !== 'pointbuy' || base <= 8;
+            const baseIncDisabled =
+              method !== 'pointbuy' || base >= 18 || pointBuyRemaining === 0;
+            const asiDecDisabled = asiForAttr <= 0;
+            const asiIncDisabled = asiRemaining <= 0;
             return (
               <div
                 key={key}
                 draggable
-                onDragStart={(e) => setDrag(e, { source: 'attr', attrKey: key })}
+                onDragStart={(e) =>
+                  setDrag(e, { source: 'attr', attrKey: key })
+                }
                 onDragOver={(e) => {
-                  e.preventDefault()
-                  setDragOverKey(key)
+                  e.preventDefault();
+                  setDragOverKey(key);
                 }}
                 onDragLeave={() => setDragOverKey(null)}
                 onDrop={(e) => handleAttrDrop(e, key)}
                 className={[
                   'flex flex-col items-center bg-ctp-surface0 border rounded-xl p-3 gap-1 cursor-grab active:cursor-grabbing transition-colors',
-                  isOver ? 'border-ctp-mauve bg-ctp-surface1' : 'border-ctp-surface1',
+                  isOver
+                    ? 'border-ctp-mauve bg-ctp-surface1'
+                    : 'border-ctp-surface1',
                 ].join(' ')}
               >
                 <h3 className="text-xs font-semibold text-ctp-subtext1 uppercase tracking-wider">
@@ -336,7 +371,9 @@ export default function AttributesSection({
                 <div className="text-3xl font-bold text-ctp-text w-10 text-center">
                   {finalScore}
                 </div>
-                <div className="text-base font-semibold text-ctp-mauve">{modifier(finalScore)}</div>
+                <div className="text-base font-semibold text-ctp-mauve">
+                  {modifier(finalScore)}
+                </div>
                 <div className="w-full border-t border-ctp-surface2 mt-1 pt-2 flex flex-col gap-1">
                   <div className="flex justify-between items-center text-xs text-ctp-subtext1">
                     <span>Base</span>
@@ -387,17 +424,23 @@ export default function AttributesSection({
                     <div className="flex items-center gap-1">
                       <button
                         onMouseDown={(e) => e.stopPropagation()}
-                        onClick={() => onConditionChange(key, conditionForAttr - 1)}
+                        onClick={() =>
+                          onConditionChange(key, conditionForAttr - 1)
+                        }
                         className={rowButtonClass}
                       >
                         −
                       </button>
                       <span className="w-5 text-center">
-                        {conditionForAttr > 0 ? `+${conditionForAttr}` : conditionForAttr}
+                        {conditionForAttr > 0
+                          ? `+${conditionForAttr}`
+                          : conditionForAttr}
                       </span>
                       <button
                         onMouseDown={(e) => e.stopPropagation()}
-                        onClick={() => onConditionChange(key, conditionForAttr + 1)}
+                        onClick={() =>
+                          onConditionChange(key, conditionForAttr + 1)
+                        }
                         className={rowButtonClass}
                       >
                         +
@@ -414,10 +457,10 @@ export default function AttributesSection({
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
+  );
 }

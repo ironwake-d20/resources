@@ -1,7 +1,7 @@
-import type { RollResult } from '../utils/dice'
+import type { RollResult } from '../utils/dice';
 
 export default function DiceRollResult({ result }: { result: RollResult }) {
-  const droppedCount = result.dice.filter((d) => !d.kept).length
+  const droppedCount = result.dice.filter((d) => !d.kept).length;
 
   return (
     <div className="flex flex-col gap-3">
@@ -24,16 +24,17 @@ export default function DiceRollResult({ result }: { result: RollResult }) {
             >
               {die.value}
             </span>
-          )
+          ),
         )}
       </div>
       {(result.modifier !== 0 || droppedCount > 0) && (
         <p className="text-xs text-ctp-subtext0">
           {droppedCount > 0 && `${droppedCount} dropped`}
           {droppedCount > 0 && result.modifier !== 0 && ' · '}
-          {result.modifier !== 0 && `modifier ${result.modifier > 0 ? '+' : ''}${result.modifier}`}
+          {result.modifier !== 0 &&
+            `modifier ${result.modifier > 0 ? '+' : ''}${result.modifier}`}
         </p>
       )}
     </div>
-  )
+  );
 }

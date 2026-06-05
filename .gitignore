@@ -1,7 +1,7 @@
-
-node_modules
-dist
-.DS_Store
+# installation/build artifacts
+node_modules/
+coverage/
+dist/
 *.local
 package-lock.json
 npm-debug.log*

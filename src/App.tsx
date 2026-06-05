@@ -1,22 +1,22 @@
-import { useState, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
-import AppHeader from './components/layout/AppHeader'
-import AppFooter from './components/layout/AppFooter'
-import Home from './components/Home'
-import DiceRoller from './components/tools/DiceRoller'
-import CharacterSheet from './components/tools/CharacterSheet'
+import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import AppHeader from './components/layout/AppHeader';
+import AppFooter from './components/layout/AppFooter';
+import Home from './components/Home';
+import DiceRoller from './components/tools/DiceRoller';
+import CharacterSheet from './components/tools/CharacterSheet';
 
 export default function App() {
   const [dark, setDark] = useState(() => {
-    const stored = localStorage.getItem('theme')
-    if (stored) return stored === 'dark'
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-  })
+    const stored = localStorage.getItem('theme');
+    if (stored) return stored === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
   useEffect(() => {
-    document.documentElement.classList.toggle('mocha', dark)
-    localStorage.setItem('theme', dark ? 'dark' : 'light')
-  }, [dark])
+    document.documentElement.classList.toggle('mocha', dark);
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  }, [dark]);
 
   return (
     <div className="min-h-screen bg-ctp-base text-ctp-text flex flex-col">
@@ -30,5 +30,5 @@ export default function App() {
       </main>
       <AppFooter />
     </div>
-  )
+  );
 }

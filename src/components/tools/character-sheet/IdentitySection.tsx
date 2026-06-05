@@ -1,74 +1,74 @@
-import * as ironwake from '../../../campaigns/ironwake'
-import * as utopia from '../../../campaigns/utopia'
-import type { Campaign, KaiLevel, Race } from '../../../campaigns/types'
-import { XP_THRESHOLDS, fmt, xpToLevel } from '../../../utils/xp'
-import KaiLevelSelect from './KaiLevelSelect'
-import { inputClass, labelClass, selectClass } from './styles'
+import * as ironwake from '../../../campaigns/ironwake';
+import * as utopia from '../../../campaigns/utopia';
+import type { Campaign, KaiLevel, Race } from '../../../campaigns/types';
+import { XP_THRESHOLDS, fmt, xpToLevel } from '../../../utils/xp';
+import KaiLevelSelect from './KaiLevelSelect';
+import { inputClass, labelClass, selectClass } from './styles';
 
 const CAMPAIGN_CLASSES: Record<Campaign, string[]> = {
   ironwake: ironwake.classes,
   utopia: utopia.classes,
-}
+};
 const CAMPAIGN_LINEAGES: Record<Campaign, string[]> = {
   ironwake: ironwake.lineages,
   utopia: utopia.lineages,
-}
+};
 const CAMPAIGN_RACES: Record<Campaign, Race[]> = {
   ironwake: ironwake.races,
   utopia: utopia.races,
-}
+};
 const CAMPAIGN_UNDEAD: Record<Campaign, string[]> = {
   ironwake: ['-------', ...ironwake.undead],
   utopia: ['-------', ...utopia.undead],
-}
+};
 
-const SIZES = ['XXXS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
+const SIZES = ['XXXS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
 
 function kaiBand(position: number): string {
-  if (position <= 300) return 'Low'
-  if (position <= 700) return 'Medium'
-  return 'High'
+  if (position <= 300) return 'Low';
+  if (position <= 700) return 'Medium';
+  return 'High';
 }
 
 interface Props {
-  campaign: Campaign
-  characterName: string
-  onCharacterNameChange: (v: string) => void
-  playerName: string
-  onPlayerNameChange: (v: string) => void
-  age: string
-  onAgeChange: (v: string) => void
-  size: string
-  onSizeChange: (v: string) => void
-  height: string
-  onHeightChange: (v: string) => void
-  weight: string
-  onWeightChange: (v: string) => void
-  religion: string
-  onReligionChange: (v: string) => void
-  lineage: string
-  onLineageChange: (v: string) => void
-  characterClass: string
-  onCharacterClassChange: (v: string) => void
-  subclass: string
-  onSubclassChange: (v: string) => void
-  race: string
-  onRaceChange: (v: string) => void
-  undead: string
-  onUndeadChange: (v: string) => void
-  kaiName: string
-  kaiLevels: KaiLevel[]
-  kaiLevel: number | ''
-  onKaiLevelChange: (raw: string) => void
-  kaiValue: string
-  onKaiValueChange: (v: string) => void
-  kaiPosition: number
-  onKaiRoll: () => void
-  effectiveMaxLevel: number
-  level: number
-  onLevelChange: (raw: string) => void
-  xp: number
-  onXpChange: (raw: string) => void
+  campaign: Campaign;
+  characterName: string;
+  onCharacterNameChange: (v: string) => void;
+  playerName: string;
+  onPlayerNameChange: (v: string) => void;
+  age: string;
+  onAgeChange: (v: string) => void;
+  size: string;
+  onSizeChange: (v: string) => void;
+  height: string;
+  onHeightChange: (v: string) => void;
+  weight: string;
+  onWeightChange: (v: string) => void;
+  religion: string;
+  onReligionChange: (v: string) => void;
+  lineage: string;
+  onLineageChange: (v: string) => void;
+  characterClass: string;
+  onCharacterClassChange: (v: string) => void;
+  subclass: string;
+  onSubclassChange: (v: string) => void;
+  race: string;
+  onRaceChange: (v: string) => void;
+  undead: string;
+  onUndeadChange: (v: string) => void;
+  kaiName: string;
+  kaiLevels: KaiLevel[];
+  kaiLevel: number | '';
+  onKaiLevelChange: (raw: string) => void;
+  kaiValue: string;
+  onKaiValueChange: (v: string) => void;
+  kaiPosition: number;
+  onKaiRoll: () => void;
+  effectiveMaxLevel: number;
+  level: number;
+  onLevelChange: (raw: string) => void;
+  xp: number;
+  onXpChange: (raw: string) => void;
 }
 
 export default function IdentitySection({
@@ -254,7 +254,9 @@ export default function IdentitySection({
             kaiLevels={kaiLevels}
             value={kaiLevel}
             onChange={onKaiLevelChange}
-            outOfSync={kaiLevel !== '' && (kaiPosition < 0 || kaiPosition > 999)}
+            outOfSync={
+              kaiLevel !== '' && (kaiPosition < 0 || kaiPosition > 999)
+            }
           />
         </div>
         <div className="col-span-6 flex flex-col gap-1">
@@ -269,7 +271,9 @@ export default function IdentitySection({
                 >
                   Roll
                 </button>
-                <span className="ml-2 text-ctp-subtext0">Band: {kaiBand(kaiPosition)}</span>
+                <span className="ml-2 text-ctp-subtext0">
+                  Band: {kaiBand(kaiPosition)}
+                </span>
               </>
             )}
           </label>
@@ -278,11 +282,17 @@ export default function IdentitySection({
             min={0}
             disabled={kaiLevel === ''}
             placeholder={
-              kaiLevel === '' ? `Choose the ${kaiName} level first` : `Enter ${kaiName} value`
+              kaiLevel === ''
+                ? `Choose the ${kaiName} level first`
+                : `Enter ${kaiName} value`
             }
             value={kaiValue}
             onChange={(e) => onKaiValueChange(e.target.value)}
-            className={kaiLevel === '' ? inputClass + ' opacity-50 cursor-not-allowed' : inputClass}
+            className={
+              kaiLevel === ''
+                ? inputClass + ' opacity-50 cursor-not-allowed'
+                : inputClass
+            }
           />
         </div>
 
@@ -349,7 +359,7 @@ export default function IdentitySection({
             XP
             {level < effectiveMaxLevel && (
               <span className="ml-2 text-ctp-subtext0">
-                ({fmt(XP_THRESHOLDS[level] - xp)} to next level)
+                ({fmt((XP_THRESHOLDS[level] ?? 0) - xp)} to next level)
               </span>
             )}
           </label>
@@ -363,5 +373,5 @@ export default function IdentitySection({
         </div>
       </div>
     </section>
-  )
+  );
 }

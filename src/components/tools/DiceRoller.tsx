@@ -1,33 +1,35 @@
-import { useState } from 'react'
-import { roll, type RollResult } from '../../utils/dice'
-import DiceRollResult from '../DiceRollResult'
+import { useState } from 'react';
+import { roll, type RollResult } from '../../utils/dice';
+import DiceRollResult from '../DiceRollResult';
 
 const inputClass =
-  'w-16 bg-ctp-surface0 border border-ctp-surface2 text-ctp-text rounded-lg px-2 py-1.5 text-center focus:outline-none focus:border-ctp-mauve'
+  'w-16 bg-ctp-surface0 border border-ctp-surface2 text-ctp-text rounded-lg px-2 py-1.5 text-center focus:outline-none focus:border-ctp-mauve';
 
 function clampInt(value: string, min: number, fallback: number): number {
-  const n = parseInt(value)
-  return isNaN(n) ? fallback : Math.max(min, n)
+  const n = parseInt(value);
+  return isNaN(n) ? fallback : Math.max(min, n);
 }
 
 export default function DiceRoller() {
-  const [count, setCount] = useState(4)
-  const [sides, setSides] = useState(6)
-  const [modifier, setModifier] = useState(0)
-  const [keepAll, setKeepAll] = useState(true)
-  const [keepCount, setKeepCount] = useState(3)
-  const [keepBest, setKeepBest] = useState(true)
-  const [result, setResult] = useState<RollResult | null>(null)
+  const [count, setCount] = useState(4);
+  const [sides, setSides] = useState(6);
+  const [modifier, setModifier] = useState(0);
+  const [keepAll, setKeepAll] = useState(true);
+  const [keepCount, setKeepCount] = useState(3);
+  const [keepBest, setKeepBest] = useState(true);
+  const [result, setResult] = useState<RollResult | null>(null);
 
   function handleRoll() {
-    const resolvedKeep = keepAll ? undefined : Math.min(keepCount, count)
-    setResult(roll(count, sides, modifier, resolvedKeep, keepBest))
+    const resolvedKeep = keepAll ? undefined : Math.min(keepCount, count);
+    setResult(roll(count, sides, modifier, resolvedKeep, keepBest));
   }
 
   return (
     <div>
       <h2 className="text-2xl font-bold text-ctp-text mb-1">Dice Roller</h2>
-      <p className="text-ctp-subtext1 mb-8">Roll and keep dice for any purpose.</p>
+      <p className="text-ctp-subtext1 mb-8">
+        Roll and keep dice for any purpose.
+      </p>
 
       <div className="bg-ctp-mantle rounded-xl border border-ctp-surface0 p-6 flex flex-col gap-5 max-w-md">
         <div className="flex items-center gap-2 flex-wrap">
@@ -37,9 +39,9 @@ export default function DiceRoller() {
             min={1}
             value={count}
             onChange={(e) => {
-              const newCount = clampInt(e.target.value, 1, 1)
-              setCount(newCount)
-              if (keepCount > newCount) setKeepCount(newCount)
+              const newCount = clampInt(e.target.value, 1, 1);
+              setCount(newCount);
+              if (keepCount > newCount) setKeepCount(newCount);
             }}
             className={inputClass}
           />
@@ -79,7 +81,9 @@ export default function DiceRoller() {
                 min={1}
                 max={count}
                 value={keepCount}
-                onChange={(e) => setKeepCount(Math.min(count, clampInt(e.target.value, 1, 1)))}
+                onChange={(e) =>
+                  setKeepCount(Math.min(count, clampInt(e.target.value, 1, 1)))
+                }
                 className={inputClass}
               />
               <select
@@ -108,5 +112,5 @@ export default function DiceRoller() {
         </div>
       )}
     </div>
-  )
+  );
 }
