@@ -414,115 +414,126 @@ export default function CharacterSheet() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-6 max-w-3xl">
-        <CampaignSection campaign={campaign} onChange={handleCampaignChange} />
+      <div className="grid grid-cols-1 2xl:grid-cols-12 items-start gap-6 max-w-7xl">
+        <div className="2xl:col-span-12">
+          <CampaignSection
+            campaign={campaign}
+            onChange={handleCampaignChange}
+          />
+        </div>
 
-        <IdentitySection
-          campaign={campaign}
-          characterName={characterName}
-          onCharacterNameChange={setCharacterName}
-          playerName={playerName}
-          onPlayerNameChange={setPlayerName}
-          age={age}
-          onAgeChange={setAge}
-          size={size}
-          onSizeChange={setSize}
-          height={height}
-          onHeightChange={setHeight}
-          weight={weight}
-          onWeightChange={setWeight}
-          religion={religion}
-          onReligionChange={setReligion}
-          lineage={lineage}
-          onLineageChange={setLineage}
-          characterClass={characterClass}
-          onCharacterClassChange={setCharacterClass}
-          subclass={subclass}
-          onSubclassChange={setSubclass}
-          race={race}
-          onRaceChange={setRace}
-          undead={undead}
-          onUndeadChange={setUndead}
-          kaiName={CAMPAIGN_KAI_NAMES[campaign]}
-          kaiLevels={CAMPAIGN_KAI_LEVELS[campaign]}
-          kaiLevel={kaiLevel}
-          onKaiLevelChange={handleKaiLevelChange}
-          kaiValue={kaiValue}
-          onKaiValueChange={handleKaiValueChange}
-          kaiPosition={kaiPosition}
-          onKaiRoll={handleKaiRoll}
-          effectiveMaxLevel={effectiveMaxLevel}
-          level={level}
-          onLevelChange={handleLevelChange}
-          xp={xp}
-          onXpChange={handleXpChange}
-        />
+        <div className="2xl:col-span-12">
+          <IdentitySection
+            campaign={campaign}
+            characterName={characterName}
+            onCharacterNameChange={setCharacterName}
+            playerName={playerName}
+            onPlayerNameChange={setPlayerName}
+            age={age}
+            onAgeChange={setAge}
+            size={size}
+            onSizeChange={setSize}
+            height={height}
+            onHeightChange={setHeight}
+            weight={weight}
+            onWeightChange={setWeight}
+            religion={religion}
+            onReligionChange={setReligion}
+            lineage={lineage}
+            onLineageChange={setLineage}
+            characterClass={characterClass}
+            onCharacterClassChange={setCharacterClass}
+            subclass={subclass}
+            onSubclassChange={setSubclass}
+            race={race}
+            onRaceChange={setRace}
+            undead={undead}
+            onUndeadChange={setUndead}
+            kaiName={CAMPAIGN_KAI_NAMES[campaign]}
+            kaiLevels={CAMPAIGN_KAI_LEVELS[campaign]}
+            kaiLevel={kaiLevel}
+            onKaiLevelChange={handleKaiLevelChange}
+            kaiValue={kaiValue}
+            onKaiValueChange={handleKaiValueChange}
+            kaiPosition={kaiPosition}
+            onKaiRoll={handleKaiRoll}
+            effectiveMaxLevel={effectiveMaxLevel}
+            level={level}
+            onLevelChange={handleLevelChange}
+            xp={xp}
+            onXpChange={handleXpChange}
+          />
+        </div>
 
-        <AttributesSection
-          method={attributeMethod}
-          onMethodChange={(m) => {
-            setAttributeMethod(m);
-            if (m === 'pointbuy') {
-              setAttributes({
-                str: 8,
-                dex: 8,
-                con: 8,
-                int: 8,
-                wis: 8,
-                cha: 8,
-              });
-            } else {
-              setAttributes({
-                str: 1,
-                dex: 1,
-                con: 1,
-                int: 1,
-                wis: 1,
-                cha: 1,
-              });
-            }
-          }}
-          attributes={attributes}
-          onAttributeChange={handleAttributeChange}
-          onAttributeSwap={handleAttributeSwap}
-          racialBonus={racialBonus}
-          kaiLevel={kaiLevel}
-          level={level}
-          asis={asis}
-          onAsiChange={handleAsiChange}
-          conditions={conditions}
-          onConditionChange={handleConditionChange}
-        />
+        <div className="2xl:col-span-4">
+          <AttributesSection
+            method={attributeMethod}
+            onMethodChange={(m) => {
+              setAttributeMethod(m);
+              if (m === 'pointbuy') {
+                setAttributes({
+                  str: 8,
+                  dex: 8,
+                  con: 8,
+                  int: 8,
+                  wis: 8,
+                  cha: 8,
+                });
+              } else {
+                setAttributes({
+                  str: 1,
+                  dex: 1,
+                  con: 1,
+                  int: 1,
+                  wis: 1,
+                  cha: 1,
+                });
+              }
+            }}
+            attributes={attributes}
+            onAttributeChange={handleAttributeChange}
+            onAttributeSwap={handleAttributeSwap}
+            racialBonus={racialBonus}
+            kaiLevel={kaiLevel}
+            level={level}
+            asis={asis}
+            onAsiChange={handleAsiChange}
+            conditions={conditions}
+            onConditionChange={handleConditionChange}
+          />
+        </div>
 
-        <StatusSection
-          level={level}
-          vitalityMax={vitalityMax}
-          currentVitality={currentVitality}
-          onCurrentVitalityChange={setCurrentVitality}
-          vitalityConModifier={conModifier}
-          vitalityRacialBonus={vitalityRacialBonus}
-          vitalityClassBonus={vitalityClassBonus}
-          vitalityKaiBonus={vitalityKaiBonus}
-          vitalityRolls={vitalityRolls}
-          onVitalityRerollAll={handleVitalityRerollAll}
-          vitalityCondition={vitalityCondition}
-          onVitalityConditionChange={setVitalityCondition}
-          woundsBase={woundsBase}
-          woundsKaiBonus={woundsKaiBonus}
-          woundsClassBonus={woundsClassBonus}
-          woundsCondition={woundsCondition}
-          currentWounds={currentWounds}
-          onCurrentWoundsChange={setCurrentWounds}
-          onWoundsConditionChange={setWoundsCondition}
-          manaMax={manaMax}
-          currentMana={currentMana}
-          onCurrentManaChange={setCurrentMana}
-          overdrawEvents={overdrawEvents}
-          onOverdrawEventsChange={setOverdrawEvents}
-          stabilisationChecks={stabilisationChecks}
-          onStabilisationCheckChange={handleStabilisationCheckChange}
-          onStabilisationChecksReset={handleStabilisationChecksReset}
-        />
+        <div className="2xl:col-span-8">
+          <StatusSection
+            level={level}
+            vitalityMax={vitalityMax}
+            currentVitality={currentVitality}
+            onCurrentVitalityChange={setCurrentVitality}
+            vitalityConModifier={conModifier}
+            vitalityRacialBonus={vitalityRacialBonus}
+            vitalityClassBonus={vitalityClassBonus}
+            vitalityKaiBonus={vitalityKaiBonus}
+            vitalityRolls={vitalityRolls}
+            onVitalityRerollAll={handleVitalityRerollAll}
+            vitalityCondition={vitalityCondition}
+            onVitalityConditionChange={setVitalityCondition}
+            woundsBase={woundsBase}
+            woundsKaiBonus={woundsKaiBonus}
+            woundsClassBonus={woundsClassBonus}
+            woundsCondition={woundsCondition}
+            currentWounds={currentWounds}
+            onCurrentWoundsChange={setCurrentWounds}
+            onWoundsConditionChange={setWoundsCondition}
+            manaMax={manaMax}
+            currentMana={currentMana}
+            onCurrentManaChange={setCurrentMana}
+            overdrawEvents={overdrawEvents}
+            onOverdrawEventsChange={setOverdrawEvents}
+            stabilisationChecks={stabilisationChecks}
+            onStabilisationCheckChange={handleStabilisationCheckChange}
+            onStabilisationChecksReset={handleStabilisationChecksReset}
+          />
+        </div>
       </div>
     </div>
   );

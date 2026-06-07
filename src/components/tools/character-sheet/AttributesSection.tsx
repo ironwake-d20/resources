@@ -323,7 +323,7 @@ export default function AttributesSection({
           </div>
         )}
 
-        <div className="col-span-12 grid grid-cols-3 gap-3">
+        <div className="col-span-12 grid grid-cols-2 grid-rows-3 grid-flow-col gap-3">
           {ATTRIBUTE_LABELS.map(({ key, label }) => {
             const base = attributes[key];
             const kaiBonus =
