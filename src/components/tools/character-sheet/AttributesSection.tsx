@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { RacialBonus } from '../../../campaigns/types';
+import { ChangeableRow, ConstantRow } from './ScoreComponentRow';
 import { labelClass, selectClass } from './styles';
 
 export type AttributeMethod =
@@ -44,9 +45,6 @@ interface RolledScore {
   numKept: number;
   modifier: number;
 }
-
-const rowButtonClass =
-  'flex items-center justify-center w-4 h-4 rounded bg-ctp-surface1 border border-ctp-surface2 text-ctp-subtext1 hover:text-ctp-text hover:bg-ctp-surface2 transition-colors text-xs font-bold cursor-pointer select-none disabled:opacity-30 disabled:cursor-not-allowed';
 
 function modifier(score: number): string {
   const mod = Math.floor((score - 10) / 2);
@@ -375,86 +373,31 @@ export default function AttributesSection({
                   {modifier(finalScore)}
                 </div>
                 <div className="w-full border-t border-ctp-surface2 mt-1 pt-2 flex flex-col gap-1">
-                  <div className="flex justify-between items-center text-xs text-ctp-subtext1">
-                    <span>Base</span>
-                    <div className="flex items-center gap-1">
-                      <button
-                        disabled={baseDecDisabled}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onClick={() => onAttributeChange(key, base - 1)}
-                        className={rowButtonClass}
-                      >
-                        −
-                      </button>
-                      <span className="w-5 text-center">{base}</span>
-                      <button
-                        disabled={baseIncDisabled}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onClick={() => onAttributeChange(key, base + 1)}
-                        className={rowButtonClass}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center text-xs text-ctp-subtext1">
-                    <span>ASIs</span>
-                    <div className="flex items-center gap-1">
-                      <button
-                        disabled={asiDecDisabled}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onClick={() => onAsiChange(key, asiForAttr - 1)}
-                        className={rowButtonClass}
-                      >
-                        −
-                      </button>
-                      <span className="w-5 text-center">+{asiForAttr}</span>
-                      <button
-                        disabled={asiIncDisabled}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onClick={() => onAsiChange(key, asiForAttr + 1)}
-                        className={rowButtonClass}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center text-xs text-ctp-subtext1">
-                    <span>Condition</span>
-                    <div className="flex items-center gap-1">
-                      <button
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onClick={() =>
-                          onConditionChange(key, conditionForAttr - 1)
-                        }
-                        className={rowButtonClass}
-                      >
-                        −
-                      </button>
-                      <span className="w-5 text-center">
-                        {conditionForAttr > 0
-                          ? `+${conditionForAttr}`
-                          : conditionForAttr}
-                      </span>
-                      <button
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onClick={() =>
-                          onConditionChange(key, conditionForAttr + 1)
-                        }
-                        className={rowButtonClass}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex justify-between text-xs text-ctp-subtext1">
-                    <span>Racial bonus</span>
-                    <span>+{racialBonusForAttr}</span>
-                  </div>
-                  <div className="flex justify-between text-xs text-ctp-subtext1">
-                    <span>Kai bonus</span>
-                    <span>+{kaiBonus}</span>
-                  </div>
+                  <ChangeableRow
+                    label="Base"
+                    value={base}
+                    onChange={(v) => onAttributeChange(key, v)}
+                    decDisabled={baseDecDisabled}
+                    incDisabled={baseIncDisabled}
+                    signed={false}
+                  />
+                  <ChangeableRow
+                    label="ASIs"
+                    value={asiForAttr}
+                    onChange={(v) => onAsiChange(key, v)}
+                    decDisabled={asiDecDisabled}
+                    incDisabled={asiIncDisabled}
+                  />
+                  <ChangeableRow
+                    label="Condition"
+                    value={conditionForAttr}
+                    onChange={(v) => onConditionChange(key, v)}
+                  />
+                  <ConstantRow
+                    label="Racial bonus"
+                    value={racialBonusForAttr}
+                  />
+                  <ConstantRow label="Kai bonus" value={kaiBonus} />
                 </div>
               </div>
             );

@@ -9,8 +9,15 @@ import AttributesSection, {
 } from './character-sheet/AttributesSection';
 import CampaignSection from './character-sheet/CampaignSection';
 import IdentitySection from './character-sheet/IdentitySection';
+import StatusSection, {
+  type StabilisationState,
+} from './character-sheet/StatusSection';
 
 const CAMPAIGN_RACES_DATA = { ironwake: ironwake.races, utopia: utopia.races };
+const CAMPAIGN_CLASS_BONUSES = {
+  ironwake: ironwake.classBonuses,
+  utopia: utopia.classBonuses,
+};
 
 const CAMPAIGN_KAI_NAMES: Record<Campaign, string> = {
   ironwake: ironwake.kaiName,
@@ -46,6 +53,20 @@ const DEFAULTS = {
   attributes: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 } as Attributes,
   asis: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 } as Attributes,
   conditions: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 } as Attributes,
+  currentVitality: 0,
+  currentWounds: 0,
+  woundsCondition: 0,
+  vitalityCondition: 0,
+  currentMana: 0,
+  overdrawEvents: 0,
+  vitalityRolls: [] as number[],
+  stabilisationChecks: [
+    'empty',
+    'empty',
+    'empty',
+    'empty',
+    'empty',
+  ] as StabilisationState[],
 };
 
 function loadSaved() {
@@ -89,6 +110,30 @@ export default function CharacterSheet() {
   const [conditions, setConditions] = useState<Attributes>(
     saved.conditions ?? DEFAULTS.conditions,
   );
+  const [currentVitality, setCurrentVitality] = useState<number>(
+    saved.currentVitality ?? DEFAULTS.currentVitality,
+  );
+  const [currentWounds, setCurrentWounds] = useState<number>(
+    saved.currentWounds ?? DEFAULTS.currentWounds,
+  );
+  const [woundsCondition, setWoundsCondition] = useState<number>(
+    saved.woundsCondition ?? DEFAULTS.woundsCondition,
+  );
+  const [vitalityCondition, setVitalityCondition] = useState<number>(
+    saved.vitalityCondition ?? DEFAULTS.vitalityCondition,
+  );
+  const [currentMana, setCurrentMana] = useState<number>(
+    saved.currentMana ?? DEFAULTS.currentMana,
+  );
+  const [overdrawEvents, setOverdrawEvents] = useState<number>(
+    saved.overdrawEvents ?? DEFAULTS.overdrawEvents,
+  );
+  const [stabilisationChecks, setStabilisationChecks] = useState<
+    StabilisationState[]
+  >(saved.stabilisationChecks ?? DEFAULTS.stabilisationChecks);
+  const [vitalityRolls, setVitalityRolls] = useState<number[]>(
+    saved.vitalityRolls ?? DEFAULTS.vitalityRolls,
+  );
 
   useEffect(() => {
     localStorage.setItem(
@@ -116,6 +161,14 @@ export default function CharacterSheet() {
         attributes,
         asis,
         conditions,
+        currentVitality,
+        currentWounds,
+        woundsCondition,
+        vitalityCondition,
+        currentMana,
+        overdrawEvents,
+        vitalityRolls,
+        stabilisationChecks,
       }),
     );
   }, [
@@ -141,16 +194,79 @@ export default function CharacterSheet() {
     attributes,
     asis,
     conditions,
+    currentVitality,
+    currentWounds,
+    woundsCondition,
+    vitalityCondition,
+    currentMana,
+    overdrawEvents,
+    vitalityRolls,
+    stabilisationChecks,
   ]);
 
   const racialBonus: RacialBonus =
     CAMPAIGN_RACES_DATA[campaign].find((r) => r.name === race)?.bonus ?? {};
+
+  const conKaiBonus =
+    kaiLevel !== '' ? Math.max(0, (kaiLevel as number) - attributes.con) : 0;
+  const effectiveConstitution =
+    attributes.con +
+    conKaiBonus +
+    (racialBonus.con ?? 0) +
+    (asis.con ?? 0) +
+    (conditions.con ?? 0);
+  const woundsBase = Math.max(1, Math.floor(effectiveConstitution / 4));
+  const woundsKaiBonus = kaiLevel !== '' && kaiLevel >= 6 ? 1 : 0;
+  const woundsClassBonus =
+    CAMPAIGN_CLASS_BONUSES[campaign][characterClass]?.wounds ?? 0;
+  const conModifier = Math.floor((effectiveConstitution - 10) / 2);
+  const vitalityRacialBonus = racialBonus.vitality ?? 0;
+  const vitalityClassBonus =
+    CAMPAIGN_CLASS_BONUSES[campaign][characterClass]?.vitality ?? 0;
+  const vitalityKaiBonus = kaiLevel !== '' && kaiLevel >= 7 ? 1 : 0;
+
+  const rollsTotal = vitalityRolls.reduce((a, b) => a + b, 0);
+  const levelBonusSum =
+    (conModifier +
+      vitalityRacialBonus +
+      vitalityClassBonus +
+      vitalityKaiBonus) *
+    level;
+  const vitalityMax = Math.max(
+    1,
+    1 + rollsTotal + levelBonusSum + vitalityCondition,
+  );
+  const manaMax = 0;
 
   const effectiveMaxLevel =
     kaiLevel !== ''
       ? (CAMPAIGN_KAI_LEVELS[campaign].find((k) => k.level === kaiLevel)
           ?.maxLevel ?? MAX_LEVEL)
       : MAX_LEVEL;
+
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    const expected = level;
+    if (vitalityRolls.length === expected) return;
+    if (vitalityRolls.length > expected) {
+      setVitalityRolls(vitalityRolls.slice(0, expected));
+      return;
+    }
+    const missing = expected - vitalityRolls.length;
+    const newRolls = Array.from(
+      { length: missing },
+      () => Math.floor(Math.random() * 4) + 1,
+    );
+    setVitalityRolls([...vitalityRolls, ...newRolls]);
+  }, [level, vitalityRolls]);
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  /* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
+  useEffect(() => {
+    if (currentVitality < vitalityMax) setCurrentVitality(vitalityMax);
+    if (currentMana < manaMax) setCurrentMana(manaMax);
+  }, [vitalityMax, manaMax]);
+  /* eslint-enable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
 
   function handleCampaignChange(newCampaign: Campaign) {
     setCampaign(newCampaign);
@@ -228,6 +344,14 @@ export default function CharacterSheet() {
     setAttributes(DEFAULTS.attributes);
     setAsis(DEFAULTS.asis);
     setConditions(DEFAULTS.conditions);
+    setCurrentVitality(DEFAULTS.currentVitality);
+    setCurrentWounds(DEFAULTS.currentWounds);
+    setWoundsCondition(DEFAULTS.woundsCondition);
+    setVitalityCondition(DEFAULTS.vitalityCondition);
+    setCurrentMana(DEFAULTS.currentMana);
+    setOverdrawEvents(DEFAULTS.overdrawEvents);
+    setVitalityRolls(DEFAULTS.vitalityRolls);
+    setStabilisationChecks(DEFAULTS.stabilisationChecks);
   }
 
   function handleAttributeChange(key: keyof Attributes, value: number) {
@@ -248,6 +372,27 @@ export default function CharacterSheet() {
 
   function handleConditionChange(key: keyof Attributes, value: number) {
     setConditions((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function handleStabilisationCheckChange(
+    index: number,
+    value: StabilisationState,
+  ) {
+    setStabilisationChecks((prev) => {
+      const next = [...prev];
+      next[index] = value;
+      return next;
+    });
+  }
+
+  function handleStabilisationChecksReset() {
+    setStabilisationChecks(DEFAULTS.stabilisationChecks);
+  }
+
+  function handleVitalityRerollAll() {
+    setVitalityRolls(
+      Array.from({ length: level }, () => Math.floor(Math.random() * 4) + 1),
+    );
   }
 
   return (
@@ -347,6 +492,36 @@ export default function CharacterSheet() {
           onAsiChange={handleAsiChange}
           conditions={conditions}
           onConditionChange={handleConditionChange}
+        />
+
+        <StatusSection
+          level={level}
+          vitalityMax={vitalityMax}
+          currentVitality={currentVitality}
+          onCurrentVitalityChange={setCurrentVitality}
+          vitalityConModifier={conModifier}
+          vitalityRacialBonus={vitalityRacialBonus}
+          vitalityClassBonus={vitalityClassBonus}
+          vitalityKaiBonus={vitalityKaiBonus}
+          vitalityRolls={vitalityRolls}
+          onVitalityRerollAll={handleVitalityRerollAll}
+          vitalityCondition={vitalityCondition}
+          onVitalityConditionChange={setVitalityCondition}
+          woundsBase={woundsBase}
+          woundsKaiBonus={woundsKaiBonus}
+          woundsClassBonus={woundsClassBonus}
+          woundsCondition={woundsCondition}
+          currentWounds={currentWounds}
+          onCurrentWoundsChange={setCurrentWounds}
+          onWoundsConditionChange={setWoundsCondition}
+          manaMax={manaMax}
+          currentMana={currentMana}
+          onCurrentManaChange={setCurrentMana}
+          overdrawEvents={overdrawEvents}
+          onOverdrawEventsChange={setOverdrawEvents}
+          stabilisationChecks={stabilisationChecks}
+          onStabilisationCheckChange={handleStabilisationCheckChange}
+          onStabilisationChecksReset={handleStabilisationChecksReset}
         />
       </div>
     </div>

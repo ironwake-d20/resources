@@ -13,6 +13,12 @@ export interface RacialBonus {
   int?: number;
   wis?: number;
   cha?: number;
+  vitality?: number;
+}
+
+export interface ClassBonus {
+  wounds?: number;
+  vitality?: number;
 }
 
 export interface Race {

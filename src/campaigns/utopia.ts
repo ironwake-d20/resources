@@ -1,6 +1,13 @@
-import type { KaiLevel, Race } from './types';
+import type { ClassBonus, KaiLevel, Race } from './types';
 
 export const classes = ['Fighter', 'Healer', 'Spellcaster', 'Rogue'];
+
+export const classBonuses: Record<string, ClassBonus> = {
+  Fighter: { wounds: 2, vitality: 2 },
+  Healer: { wounds: 1, vitality: 1 },
+  Spellcaster: { wounds: 0, vitality: 0 },
+  Rogue: { wounds: 0, vitality: 1 },
+};
 
 export const lineages = [
   'Church-raised',
@@ -13,10 +20,10 @@ export const lineages = [
 ];
 
 export const races: Race[] = [
-  { name: 'Human', bonus: {} },
-  { name: 'Dwarf', bonus: { con: 2, str: 1 } },
-  { name: 'Elf', bonus: { dex: 2, int: 1 } },
-  { name: 'Sabbia', bonus: { con: 2, dex: 1 } },
+  { name: 'Human', bonus: { vitality: 1 } },
+  { name: 'Dwarf', bonus: { con: 2, str: 1, vitality: 2 } },
+  { name: 'Elf', bonus: { dex: 2, int: 1, vitality: 0 } },
+  { name: 'Sabbia', bonus: { con: 2, dex: 1, vitality: 2 } },
 ];
 
 export const undead = ['Vampire', 'Lich'];
