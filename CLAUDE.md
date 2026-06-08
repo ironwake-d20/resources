@@ -24,7 +24,7 @@ pnpm format:check # CI format check
 ```
 src/
   components/
-    layout/       # AppHeader, AppFooter
+    layout/       # AppHeader, AppFooter, Sidebar
     tools/        # One file per tool (e.g. DiceRoller)
   components/     # Shared components (e.g. DiceRollResult)
   utils/          # Pure logic (e.g. dice.ts)
@@ -33,6 +33,18 @@ src/
   App.tsx         # Routes
 public/           # Static assets copied as-is to dist/
 ```
+
+## Layout
+
+Per-tool layout specs live under `design/<tool>/layout.md` (e.g.
+[`design/character_sheet/layout.md`](design/character_sheet/layout.md)) and are the
+source of truth for section placement, column spans, and breakpoints. The
+conventions (12-column grid model, how specs are written) are documented in
+[`design/README.md`](design/README.md).
+
+**Always re-read the relevant `design/.../layout.md` fresh before doing layout
+work** — it can be edited mid-session, so do not rely on a version read earlier in
+the conversation or on memory. Treat the on-disk file as authoritative each time.
 
 ## Adding a new tool
 
