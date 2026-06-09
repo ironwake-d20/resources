@@ -25,6 +25,11 @@ interface Props {
   manaMax: number;
   currentMana: number;
   onCurrentManaChange: (value: number) => void;
+  manaEnabled: boolean;
+  manaAttrModifier: number;
+  manaKaiBonus: number;
+  manaCondition: number;
+  onManaConditionChange: (value: number) => void;
   overdrawEvents: number;
   onOverdrawEventsChange: (value: number) => void;
   stabilisationChecks: StabilisationState[];
@@ -38,41 +43,73 @@ interface Props {
 const rowButtonClass =
   'flex items-center justify-center w-7 h-7 rounded bg-ctp-surface1 border border-ctp-surface2 text-ctp-subtext1 hover:text-ctp-text hover:bg-ctp-surface2 transition-colors text-sm font-bold cursor-pointer select-none disabled:opacity-30 disabled:cursor-not-allowed';
 
-function SimpleCard({
-  label,
-  value,
+function ManaCard({
   max,
+  current,
   onChange,
+  enabled,
+  attrModifier,
+  kaiBonus,
+  condition,
+  onConditionChange,
+  level,
 }: {
-  label: string;
-  value: number;
   max: number;
+  current: number;
   onChange: (value: number) => void;
+  enabled: boolean;
+  attrModifier: number;
+  kaiBonus: number;
+  condition: number;
+  onConditionChange: (value: number) => void;
+  level: number;
 }) {
+  if (!enabled) {
+    return (
+      <div className="flex flex-col items-center bg-ctp-surface0 border border-ctp-surface1 rounded-xl p-4 gap-2 opacity-50">
+        <h4 className="text-xs font-semibold text-ctp-subtext1 uppercase tracking-wider">
+          Mana
+        </h4>
+        <div className="text-3xl font-bold text-ctp-overlay0 tabular-nums">
+          —
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col items-center bg-ctp-surface0 border border-ctp-surface1 rounded-xl p-4 gap-2">
       <h4 className="text-xs font-semibold text-ctp-subtext1 uppercase tracking-wider">
-        {label}
+        Mana
       </h4>
       <div className="text-3xl font-bold text-ctp-text tabular-nums">
-        {value}
+        {current}
         <span className="text-ctp-subtext0 text-xl font-medium">/{max}</span>
       </div>
       <div className="flex items-center gap-2">
         <button
-          disabled={value <= 0}
-          onClick={() => onChange(value - 1)}
+          disabled={current <= 0}
+          onClick={() => onChange(current - 1)}
           className={rowButtonClass}
         >
           -
         </button>
         <button
-          disabled={value >= max}
-          onClick={() => onChange(value + 1)}
+          disabled={current >= max}
+          onClick={() => onChange(current + 1)}
           className={rowButtonClass}
         >
           +
         </button>
+      </div>
+      <div className="w-full border-t border-ctp-surface2 mt-1 pt-2 flex flex-col gap-1 text-xs text-ctp-subtext1">
+        <ConstantRow label="Base" value={10 * level} signed={false} />
+        <ChangeableRow
+          label="Condition"
+          value={condition}
+          onChange={onConditionChange}
+        />
+        <ConstantRow label="Attr mod" value={attrModifier * level} />
+        <ConstantRow label="Kai bonus" value={kaiBonus} />
       </div>
     </div>
   );
@@ -359,6 +396,11 @@ export default function StatusSection({
   manaMax,
   currentMana,
   onCurrentManaChange,
+  manaEnabled,
+  manaAttrModifier,
+  manaKaiBonus,
+  manaCondition,
+  onManaConditionChange,
   overdrawEvents,
   onOverdrawEventsChange,
   stabilisationChecks,
@@ -400,11 +442,16 @@ export default function StatusSection({
           onChange={onCurrentWoundsChange}
           onConditionChange={onWoundsConditionChange}
         />
-        <SimpleCard
-          label="Mana"
-          value={currentMana}
+        <ManaCard
           max={manaMax}
+          current={currentMana}
           onChange={onCurrentManaChange}
+          enabled={manaEnabled}
+          attrModifier={manaAttrModifier}
+          kaiBonus={manaKaiBonus}
+          condition={manaCondition}
+          onConditionChange={onManaConditionChange}
+          level={level}
         />
       </div>
 

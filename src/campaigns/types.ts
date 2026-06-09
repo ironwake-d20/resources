@@ -16,9 +16,13 @@ export interface RacialBonus {
   vitality?: number;
 }
 
+export type ManaAttribute = 'int' | 'wis' | 'cha';
+
 export interface ClassBonus {
   wounds?: number;
   vitality?: number;
+  manaEnabled?: boolean;
+  manaAttribute?: ManaAttribute;
 }
 
 export interface Race {

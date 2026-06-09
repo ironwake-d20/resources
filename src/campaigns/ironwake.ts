@@ -3,10 +3,15 @@ import type { ClassBonus, KaiLevel, Race } from './types';
 export const classes = ['Fighter', 'Healer', 'Spellcaster', 'Rogue'];
 
 export const classBonuses: Record<string, ClassBonus> = {
-  Fighter: { wounds: 2, vitality: 2 },
-  Healer: { wounds: 1, vitality: 1 },
-  Spellcaster: { wounds: 0, vitality: 0 },
-  Rogue: { wounds: 0, vitality: 1 },
+  Fighter: { wounds: 2, vitality: 2, manaEnabled: false },
+  Healer: { wounds: 1, vitality: 1, manaEnabled: true, manaAttribute: 'wis' },
+  Spellcaster: {
+    wounds: 0,
+    vitality: 0,
+    manaEnabled: true,
+    manaAttribute: 'int',
+  },
+  Rogue: { wounds: 0, vitality: 1, manaEnabled: false },
 };
 
 export const lineages = [

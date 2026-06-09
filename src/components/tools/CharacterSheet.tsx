@@ -58,6 +58,7 @@ const DEFAULTS = {
   woundsCondition: 0,
   vitalityCondition: 0,
   currentMana: 0,
+  manaCondition: 0,
   overdrawEvents: 0,
   vitalityRolls: [] as number[],
   stabilisationChecks: [
@@ -125,6 +126,9 @@ export default function CharacterSheet() {
   const [currentMana, setCurrentMana] = useState<number>(
     saved.currentMana ?? DEFAULTS.currentMana,
   );
+  const [manaCondition, setManaCondition] = useState<number>(
+    saved.manaCondition ?? DEFAULTS.manaCondition,
+  );
   const [overdrawEvents, setOverdrawEvents] = useState<number>(
     saved.overdrawEvents ?? DEFAULTS.overdrawEvents,
   );
@@ -166,6 +170,7 @@ export default function CharacterSheet() {
         woundsCondition,
         vitalityCondition,
         currentMana,
+        manaCondition,
         overdrawEvents,
         vitalityRolls,
         stabilisationChecks,
@@ -199,6 +204,7 @@ export default function CharacterSheet() {
     woundsCondition,
     vitalityCondition,
     currentMana,
+    manaCondition,
     overdrawEvents,
     vitalityRolls,
     stabilisationChecks,
@@ -217,12 +223,11 @@ export default function CharacterSheet() {
     (conditions.con ?? 0);
   const woundsBase = Math.max(1, Math.floor(effectiveConstitution / 4));
   const woundsKaiBonus = kaiLevel !== '' && kaiLevel >= 6 ? 1 : 0;
-  const woundsClassBonus =
-    CAMPAIGN_CLASS_BONUSES[campaign][characterClass]?.wounds ?? 0;
+  const classBonus = CAMPAIGN_CLASS_BONUSES[campaign][characterClass] ?? {};
+  const woundsClassBonus = classBonus.wounds ?? 0;
   const conModifier = Math.floor((effectiveConstitution - 10) / 2);
   const vitalityRacialBonus = racialBonus.vitality ?? 0;
-  const vitalityClassBonus =
-    CAMPAIGN_CLASS_BONUSES[campaign][characterClass]?.vitality ?? 0;
+  const vitalityClassBonus = classBonus.vitality ?? 0;
   const vitalityKaiBonus = kaiLevel !== '' && kaiLevel >= 7 ? 1 : 0;
 
   const rollsTotal = vitalityRolls.reduce((a, b) => a + b, 0);
@@ -236,7 +241,30 @@ export default function CharacterSheet() {
     1,
     1 + rollsTotal + levelBonusSum + vitalityCondition,
   );
-  const manaMax = 0;
+  const manaEnabled = classBonus.manaEnabled ?? false;
+  const manaAttr = classBonus.manaAttribute;
+
+  let manaMax = 0;
+  let manaAttrModifier = 0;
+  let manaKaiBonus = 0;
+  if (manaEnabled && manaAttr) {
+    const manaAttrKaiBonus =
+      kaiLevel !== ''
+        ? Math.max(0, (kaiLevel as number) - attributes[manaAttr])
+        : 0;
+    const effectiveManaAttr =
+      attributes[manaAttr] +
+      manaAttrKaiBonus +
+      (racialBonus[manaAttr] ?? 0) +
+      (asis[manaAttr] ?? 0) +
+      (conditions[manaAttr] ?? 0);
+    manaAttrModifier = Math.floor((effectiveManaAttr - 10) / 2);
+    manaKaiBonus = kaiLevel !== '' && kaiLevel >= 5 ? 1 : 0;
+    manaMax = Math.max(
+      0,
+      10 * level + manaAttrModifier * level + manaKaiBonus + manaCondition,
+    );
+  }
 
   const effectiveMaxLevel =
     kaiLevel !== ''
@@ -349,6 +377,7 @@ export default function CharacterSheet() {
     setWoundsCondition(DEFAULTS.woundsCondition);
     setVitalityCondition(DEFAULTS.vitalityCondition);
     setCurrentMana(DEFAULTS.currentMana);
+    setManaCondition(DEFAULTS.manaCondition);
     setOverdrawEvents(DEFAULTS.overdrawEvents);
     setVitalityRolls(DEFAULTS.vitalityRolls);
     setStabilisationChecks(DEFAULTS.stabilisationChecks);
@@ -527,6 +556,11 @@ export default function CharacterSheet() {
             manaMax={manaMax}
             currentMana={currentMana}
             onCurrentManaChange={setCurrentMana}
+            manaEnabled={manaEnabled}
+            manaAttrModifier={manaAttrModifier}
+            manaKaiBonus={manaKaiBonus}
+            manaCondition={manaCondition}
+            onManaConditionChange={setManaCondition}
             overdrawEvents={overdrawEvents}
             onOverdrawEventsChange={setOverdrawEvents}
             stabilisationChecks={stabilisationChecks}
