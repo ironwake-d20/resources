@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting…</title>
+    <script>
+      // GitHub Pages SPA redirect: preserves the path and query string
+      // so BrowserRouter can pick up the correct route.
+      const path =
+        sessionStorage.redirect || location.pathname + location.search;
+      sessionStorage.redirect = path;
+      location.replace(
+        '/resources' + '?_gh_spa_redirect=' + encodeURIComponent(path),
+      );
+    </script>
+  </head>
+</html>
