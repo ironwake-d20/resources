@@ -15,6 +15,14 @@
   </head>
   <body>
     <div id="app"></div>
+    <script>
+      // GitHub Pages SPA redirect: restore the original path from the 404 page
+      const params = new URLSearchParams(location.search);
+      const redirect = params.get('_gh_spa_redirect');
+      if (redirect) {
+        history.replaceState(null, '', redirect);
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
