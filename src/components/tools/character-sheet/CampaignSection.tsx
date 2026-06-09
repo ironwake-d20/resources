@@ -1,12 +1,16 @@
-import type { Campaign } from '../../../campaigns/types';
 import { labelClass, selectClass } from './styles';
 
 interface Props {
-  campaign: Campaign;
-  onChange: (campaign: Campaign) => void;
+  campaign: string;
+  campaignNames: string[];
+  onChange: (campaign: string) => void;
 }
 
-export default function CampaignSection({ campaign, onChange }: Props) {
+export default function CampaignSection({
+  campaign,
+  campaignNames,
+  onChange,
+}: Props) {
   return (
     <section className="bg-ctp-mantle rounded-xl border border-ctp-surface0 p-6 flex flex-col gap-4">
       <h3 className="text-lg font-semibold text-ctp-text">Campaign</h3>
@@ -14,11 +18,14 @@ export default function CampaignSection({ campaign, onChange }: Props) {
         <label className={labelClass}>Campaign</label>
         <select
           value={campaign}
-          onChange={(e) => onChange(e.target.value as Campaign)}
+          onChange={(e) => onChange(e.target.value)}
           className={selectClass}
         >
-          <option value="ironwake">Ironwake</option>
-          <option value="utopia">Utopia</option>
+          {campaignNames.map((name) => (
+            <option key={name} value={name}>
+              {name.charAt(0).toUpperCase() + name.slice(1)}
+            </option>
+          ))}
         </select>
       </div>
     </section>

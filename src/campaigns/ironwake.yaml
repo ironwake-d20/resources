@@ -1,0 +1,80 @@
+classes:
+  - Fighter
+  - Healer
+  - Spellcaster
+  - Rogue
+
+classBonuses:
+  Fighter:
+    wounds: 2
+    vitality: 2
+    manaEnabled: false
+  Healer:
+    wounds: 1
+    vitality: 1
+    manaEnabled: true
+    manaAttribute: wis
+  Spellcaster:
+    wounds: 0
+    vitality: 0
+    manaEnabled: true
+    manaAttribute: int
+  Rogue:
+    wounds: 0
+    vitality: 1
+    manaEnabled: false
+
+lineages:
+  - Church-raised
+  - Guild-born
+  - Frontier-settled
+  - Urban-underclass
+  - Nomadic
+  - Academic
+  - Military
+
+races:
+  - name: Human
+    bonus:
+      vitality: 1
+  - name: Dwarf
+    bonus:
+      con: 2
+      str: 1
+      vitality: 2
+  - name: Elf
+    bonus:
+      dex: 2
+      int: 1
+      vitality: 0
+  - name: Sabbia
+    bonus:
+      con: 2
+      dex: 1
+      vitality: 2
+
+undead:
+  - Vampire
+  - Lich
+
+kaiName: Kai
+
+kaiLevels:
+  - level: 4
+    name: Forge
+    maxLevel: 17
+  - level: 5
+    name: Blaze
+    maxLevel: 20
+  - level: 6
+    name: Pyre
+    maxLevel: 30
+  - level: 7
+    name: Inferno
+    maxLevel: 40
+  - level: 8
+    name: Conflagration
+    maxLevel: 60
+  - level: 9
+    name: Stellar
+    maxLevel: 80

@@ -1,26 +1,8 @@
-import * as ironwake from '../../../campaigns/ironwake';
-import * as utopia from '../../../campaigns/utopia';
-import type { Campaign, KaiLevel, Race } from '../../../campaigns/types';
+import { campaigns } from 'virtual:campaigns';
+import type { Campaign, KaiLevel } from '../../../campaigns/types';
 import { XP_THRESHOLDS, fmt, xpToLevel } from '../../../utils/xp';
 import KaiLevelSelect from './KaiLevelSelect';
 import { inputClass, labelClass, selectClass } from './styles';
-
-const CAMPAIGN_CLASSES: Record<Campaign, string[]> = {
-  ironwake: ironwake.classes,
-  utopia: utopia.classes,
-};
-const CAMPAIGN_LINEAGES: Record<Campaign, string[]> = {
-  ironwake: ironwake.lineages,
-  utopia: utopia.lineages,
-};
-const CAMPAIGN_RACES: Record<Campaign, Race[]> = {
-  ironwake: ironwake.races,
-  utopia: utopia.races,
-};
-const CAMPAIGN_UNDEAD: Record<Campaign, string[]> = {
-  ironwake: ['-------', ...ironwake.undead],
-  utopia: ['-------', ...utopia.undead],
-};
 
 const SIZES = ['XXXS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
 
@@ -209,7 +191,7 @@ export default function IdentitySection({
                 Select a lineage
               </option>
             )}
-            {CAMPAIGN_LINEAGES[campaign].map((l) => (
+            {(campaigns[campaign]?.lineages ?? []).map((l) => (
               <option key={l} value={l}>
                 {l}
               </option>
@@ -228,7 +210,7 @@ export default function IdentitySection({
                 Select a class
               </option>
             )}
-            {CAMPAIGN_CLASSES[campaign].map((c) => (
+            {(campaigns[campaign]?.classes ?? []).map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>
@@ -309,7 +291,7 @@ export default function IdentitySection({
                 Select a race
               </option>
             )}
-            {CAMPAIGN_RACES[campaign].map((r) => (
+            {(campaigns[campaign]?.races ?? []).map((r) => (
               <option key={r.name} value={r.name}>
                 {r.name}
               </option>
@@ -323,7 +305,7 @@ export default function IdentitySection({
             onChange={(e) => onUndeadChange(e.target.value)}
             className={selectClass}
           >
-            {CAMPAIGN_UNDEAD[campaign].map((u) => (
+            {['-------', ...(campaigns[campaign]?.undead ?? [])].map((u) => (
               <option key={u} value={u}>
                 {u}
               </option>

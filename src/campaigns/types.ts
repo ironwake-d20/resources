@@ -1,4 +1,4 @@
-export type Campaign = 'ironwake' | 'utopia';
+export type Campaign = string;
 
 export interface KaiLevel {
   level: number;
@@ -28,4 +28,15 @@ export interface ClassBonus {
 export interface Race {
   name: string;
   bonus: RacialBonus;
+}
+
+/** Shape of a single campaign's data as parsed from its YAML file. */
+export interface CampaignData {
+  classes: string[];
+  classBonuses: Record<string, ClassBonus>;
+  lineages: string[];
+  races: Race[];
+  undead: string[];
+  kaiName: string;
+  kaiLevels: KaiLevel[];
 }

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import * as ironwake from '../../campaigns/ironwake';
-import * as utopia from '../../campaigns/utopia';
-import type { Campaign, KaiLevel, RacialBonus } from '../../campaigns/types';
+import { campaigns, campaignNames } from 'virtual:campaigns';
+import type { RacialBonus } from '../../campaigns/types';
 import { MAX_LEVEL, XP_THRESHOLDS } from '../../utils/xp';
 import AttributesSection, {
   type AttributeMethod,
@@ -13,25 +12,10 @@ import StatusSection, {
   type StabilisationState,
 } from './character-sheet/StatusSection';
 
-const CAMPAIGN_RACES_DATA = { ironwake: ironwake.races, utopia: utopia.races };
-const CAMPAIGN_CLASS_BONUSES = {
-  ironwake: ironwake.classBonuses,
-  utopia: utopia.classBonuses,
-};
-
-const CAMPAIGN_KAI_NAMES: Record<Campaign, string> = {
-  ironwake: ironwake.kaiName,
-  utopia: utopia.kaiName,
-};
-const CAMPAIGN_KAI_LEVELS: Record<Campaign, KaiLevel[]> = {
-  ironwake: ironwake.kaiLevels,
-  utopia: utopia.kaiLevels,
-};
-
 const STORAGE_KEY = 'ironwake-character-sheet';
 
 const DEFAULTS = {
-  campaign: 'ironwake' as Campaign,
+  campaign: '' as string,
   characterName: '',
   playerName: '',
   characterClass: '',
@@ -71,19 +55,28 @@ const DEFAULTS = {
 };
 
 function loadSaved() {
+  const defaultCampaign = campaignNames[0] ?? 'ironwake';
   try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}');
+    if (
+      typeof raw.campaign === 'string' &&
+      !campaignNames.includes(raw.campaign)
+    ) {
+      raw.campaign = defaultCampaign;
+    }
     return {
       ...DEFAULTS,
-      ...JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}'),
+      campaign: defaultCampaign,
+      ...raw,
     };
   } catch {
-    return DEFAULTS;
+    return { ...DEFAULTS, campaign: defaultCampaign };
   }
 }
 
 export default function CharacterSheet() {
   const saved = loadSaved();
-  const [campaign, setCampaign] = useState<Campaign>(saved.campaign);
+  const [campaign, setCampaign] = useState<string>(saved.campaign);
   const [characterName, setCharacterName] = useState(saved.characterName);
   const [playerName, setPlayerName] = useState(saved.playerName);
   const [characterClass, setCharacterClass] = useState(saved.characterClass);
@@ -211,7 +204,7 @@ export default function CharacterSheet() {
   ]);
 
   const racialBonus: RacialBonus =
-    CAMPAIGN_RACES_DATA[campaign].find((r) => r.name === race)?.bonus ?? {};
+    campaigns[campaign]?.races.find((r) => r.name === race)?.bonus ?? {};
 
   const conKaiBonus =
     kaiLevel !== '' ? Math.max(0, (kaiLevel as number) - attributes.con) : 0;
@@ -223,7 +216,7 @@ export default function CharacterSheet() {
     (conditions.con ?? 0);
   const woundsBase = Math.max(1, Math.floor(effectiveConstitution / 4));
   const woundsKaiBonus = kaiLevel !== '' && kaiLevel >= 6 ? 1 : 0;
-  const classBonus = CAMPAIGN_CLASS_BONUSES[campaign][characterClass] ?? {};
+  const classBonus = campaigns[campaign]?.classBonuses[characterClass] ?? {};
   const woundsClassBonus = classBonus.wounds ?? 0;
   const conModifier = Math.floor((effectiveConstitution - 10) / 2);
   const vitalityRacialBonus = racialBonus.vitality ?? 0;
@@ -268,7 +261,7 @@ export default function CharacterSheet() {
 
   const effectiveMaxLevel =
     kaiLevel !== ''
-      ? (CAMPAIGN_KAI_LEVELS[campaign].find((k) => k.level === kaiLevel)
+      ? (campaigns[campaign]?.kaiLevels.find((k) => k.level === kaiLevel)
           ?.maxLevel ?? MAX_LEVEL)
       : MAX_LEVEL;
 
@@ -296,7 +289,7 @@ export default function CharacterSheet() {
   }, [vitalityMax, manaMax]);
   /* eslint-enable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
 
-  function handleCampaignChange(newCampaign: Campaign) {
+  function handleCampaignChange(newCampaign: string) {
     setCampaign(newCampaign);
     setCharacterClass('');
     setLineage('');
@@ -314,7 +307,7 @@ export default function CharacterSheet() {
     if (newKaiLevel !== '') setKaiValue(String(newKaiLevel * 1000));
     const newMax =
       newKaiLevel !== ''
-        ? (CAMPAIGN_KAI_LEVELS[campaign].find((k) => k.level === newKaiLevel)
+        ? (campaigns[campaign]?.kaiLevels.find((k) => k.level === newKaiLevel)
             ?.maxLevel ?? MAX_LEVEL)
         : MAX_LEVEL;
     if (level > newMax) {
@@ -447,6 +440,7 @@ export default function CharacterSheet() {
         <div className="2xl:col-span-12">
           <CampaignSection
             campaign={campaign}
+            campaignNames={campaignNames}
             onChange={handleCampaignChange}
           />
         </div>
@@ -478,8 +472,8 @@ export default function CharacterSheet() {
             onRaceChange={setRace}
             undead={undead}
             onUndeadChange={setUndead}
-            kaiName={CAMPAIGN_KAI_NAMES[campaign]}
-            kaiLevels={CAMPAIGN_KAI_LEVELS[campaign]}
+            kaiName={campaigns[campaign]?.kaiName ?? 'Kai'}
+            kaiLevels={campaigns[campaign]?.kaiLevels ?? []}
             kaiLevel={kaiLevel}
             onKaiLevelChange={handleKaiLevelChange}
             kaiValue={kaiValue}
