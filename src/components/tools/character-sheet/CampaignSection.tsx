@@ -12,8 +12,8 @@ export default function CampaignSection({
   onChange,
 }: Props) {
   return (
-    <section className="bg-ctp-mantle rounded-xl border border-ctp-surface0 p-6 flex flex-col gap-4">
-      <h3 className="text-lg font-semibold text-ctp-text">Campaign</h3>
+    <section className="bg-card rounded-xl border p-6 flex flex-col gap-4">
+      <h3 className="text-lg font-semibold text-foreground">Campaign</h3>
       <div className="flex flex-col gap-1">
         <label className={labelClass}>Campaign</label>
         <select

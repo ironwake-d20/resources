@@ -1,9 +1,55 @@
 @import 'tailwindcss';
-@import '@catppuccin/tailwindcss/mocha.css';
+@import '@radix-ui/colors/sand.css';
+@import '@radix-ui/colors/sand-alpha.css';
+@import '@radix-ui/colors/sand-dark.css';
+@import '@radix-ui/colors/sand-dark-alpha.css';
+@import '@radix-ui/colors/violet.css';
+@import '@radix-ui/colors/violet-alpha.css';
+@import '@radix-ui/colors/violet-dark.css';
+@import '@radix-ui/colors/violet-dark-alpha.css';
+@import '@radix-ui/colors/green.css';
+@import '@radix-ui/colors/green-dark.css';
+@import '@radix-ui/colors/grass.css';
+@import '@radix-ui/colors/grass-dark.css';
+@import '@radix-ui/colors/amber.css';
+@import '@radix-ui/colors/amber-dark.css';
+@import '@radix-ui/colors/red.css';
+@import '@radix-ui/colors/red-dark.css';
 
-/* Override dark variant to be class-based, so the media query in mocha.css
-   is neutralized. The .mocha class on <html> drives the color swap instead. */
 @custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-background: var(--sand-1);
+  --color-foreground: var(--sand-12);
+  --color-card: var(--sand-a2);
+  --color-card-foreground: var(--sand-12);
+  --color-popover: var(--sand-a2);
+  --color-popover-foreground: var(--sand-12);
+  --color-primary: var(--violet-9);
+  --color-primary-foreground: var(--violet-1);
+  --color-grass: var(--grass-9);
+  --color-grass-foreground: var(--grass-1);
+  --color-success: var(--green-9);
+  --color-success-foreground: var(--green-1);
+  --color-warning: var(--amber-9);
+  --color-warning-foreground: var(--amber-1);
+  --color-secondary: var(--sand-3);
+  --color-secondary-foreground: var(--sand-12);
+  --color-muted: var(--sand-3);
+  --color-muted-foreground: var(--sand-11);
+  --color-accent: var(--sand-a4);
+  --color-accent-foreground: var(--sand-12);
+  --color-destructive: var(--red-9);
+  --color-destructive-foreground: var(--red-1);
+  --color-border: var(--sand-6);
+  --color-input: var(--sand-6);
+  --color-ring: var(--violet-7);
+  --success: var(--color-success);
+  --success-foreground: var(--color-success-foreground);
+  --warning: var(--color-warning);
+  --warning-foreground: var(--color-warning-foreground);
+  --radius: 0.5rem;
+}
 
 *,
 *::before,

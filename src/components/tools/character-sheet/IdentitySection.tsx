@@ -94,8 +94,8 @@ export default function IdentitySection({
   onXpChange,
 }: Props) {
   return (
-    <section className="bg-ctp-mantle rounded-xl border border-ctp-surface0 p-6 flex flex-col gap-4">
-      <h3 className="text-lg font-semibold text-ctp-text">Identity</h3>
+    <section className="bg-card rounded-xl border p-6 flex flex-col gap-4">
+      <h3 className="text-lg font-semibold text-foreground">Identity</h3>
       <div className="grid grid-cols-12 gap-4">
         {/* Row 1: names */}
         <div className="col-span-8 flex flex-col gap-1">
@@ -249,11 +249,11 @@ export default function IdentitySection({
                 <button
                   type="button"
                   onClick={onKaiRoll}
-                  className="ml-2 text-xs bg-ctp-mauve hover:bg-ctp-pink text-ctp-base font-semibold rounded px-2 py-0.5 transition-colors cursor-pointer"
+                  className="ml-2 text-xs bg-primary hover:opacity-90 text-primary-foreground font-semibold rounded px-2 py-0.5 transition-opacity cursor-pointer"
                 >
                   Roll
                 </button>
-                <span className="ml-2 text-ctp-subtext0">
+                <span className="ml-2 text-muted-foreground">
                   Band: {kaiBand(kaiPosition)}
                 </span>
               </>
@@ -318,7 +318,7 @@ export default function IdentitySection({
           <label className={labelClass}>
             Level
             {kaiLevel !== '' && (
-              <span className="ml-2 text-ctp-subtext0">
+              <span className="ml-2 text-muted-foreground">
                 (max {effectiveMaxLevel} due to {kaiName})
               </span>
             )}
@@ -331,7 +331,7 @@ export default function IdentitySection({
             onChange={(e) => onLevelChange(e.target.value)}
             className={
               xpToLevel(xp) !== level
-                ? 'w-full bg-ctp-surface0 border border-ctp-red text-ctp-red rounded-lg px-3 py-1.5 focus:outline-none focus:border-ctp-red'
+                ? 'w-full bg-secondary border border-destructive text-destructive rounded-lg px-3 py-1.5 focus:outline-none focus:border-destructive'
                 : inputClass
             }
           />
@@ -340,7 +340,7 @@ export default function IdentitySection({
           <label className={labelClass}>
             XP
             {level < effectiveMaxLevel && (
-              <span className="ml-2 text-ctp-subtext0">
+              <span className="ml-2 text-muted-foreground">
                 ({fmt((XP_THRESHOLDS[level] ?? 0) - xp)} to next level)
               </span>
             )}

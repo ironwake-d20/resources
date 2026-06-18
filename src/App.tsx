@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import AppHeader from './components/layout/AppHeader';
-import AppFooter from './components/layout/AppFooter';
 import Sidebar from './components/layout/Sidebar';
 import Home from './components/Home';
 import DiceRoller from './components/tools/DiceRoller';
@@ -15,24 +13,22 @@ export default function App() {
   });
 
   useEffect(() => {
-    document.documentElement.classList.toggle('mocha', dark);
+    document.documentElement.classList.toggle('dark', dark);
     localStorage.setItem('theme', dark ? 'dark' : 'light');
   }, [dark]);
 
   return (
-    <div className="min-h-screen bg-ctp-base text-ctp-text flex flex-col">
-      <AppHeader dark={dark} onToggleDark={() => setDark((d) => !d)} />
-      <div className="flex-1 flex w-full">
-        <Sidebar />
-        <main className="flex-1 min-w-0 px-4 py-8 sm:px-6">
+    <div className="min-h-screen bg-background text-foreground flex">
+      <Sidebar dark={dark} onToggleDark={() => setDark((d) => !d)} />
+      <main className="flex-1 min-w-0">
+        <div className="mx-auto w-full max-w-5xl px-5 py-10 sm:px-8">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/dice-roller" element={<DiceRoller />} />
-            <Route path="/character-sheet" element={<CharacterSheet />} />
+            <Route path="/dice-roller/" element={<DiceRoller />} />
+            <Route path="/character-sheet/" element={<CharacterSheet />} />
           </Routes>
-        </main>
-      </div>
-      <AppFooter />
+        </div>
+      </main>
     </div>
   );
 }

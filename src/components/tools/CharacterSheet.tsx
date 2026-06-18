@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { campaigns, campaignNames } from 'virtual:campaigns';
 import type { RacialBonus } from '../../campaigns/types';
 import { MAX_LEVEL, XP_THRESHOLDS } from '../../utils/xp';
+import { Button } from '../ui/button';
 import AttributesSection, {
   type AttributeMethod,
   type Attributes,
@@ -419,24 +420,21 @@ export default function CharacterSheet() {
 
   return (
     <div>
-      <div className="flex items-end justify-between mb-8">
+      <div className="flex items-start justify-between gap-4 mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-ctp-text mb-1">
-            Character Sheet{' '}
-            <button
-              onClick={handleRestart}
-              className="bg-ctp-surface0 hover:bg-ctp-red text-ctp-subtext1 hover:text-ctp-base text-sm font-semibold rounded-lg px-4 py-2 transition-colors cursor-pointer"
-            >
-              Restart from scratch
-            </button>
+          <h2 className="text-2xl font-semibold text-foreground mb-1">
+            Character Sheet
           </h2>
-          <p className="text-ctp-subtext1">
+          <p className="text-muted-foreground">
             Create and manage character sheets for your campaign.
           </p>
         </div>
+        <Button variant="destructive" size="sm" onClick={handleRestart}>
+          Restart
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 2xl:grid-cols-12 items-start gap-6 max-w-7xl">
+      <div className="grid grid-cols-1 2xl:grid-cols-12 items-start gap-6">
         <div className="2xl:col-span-12">
           <CampaignSection
             campaign={campaign}

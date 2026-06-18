@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { roll, type RollResult } from '../../utils/dice';
 import DiceRollResult from '../DiceRollResult';
 
-const inputClass =
-  'w-16 bg-ctp-surface0 border border-ctp-surface2 text-ctp-text rounded-lg px-2 py-1.5 text-center focus:outline-none focus:border-ctp-mauve';
+import { Button } from '../ui/button';
+import { Card } from '../ui/card';
+import { Input } from '../ui/input';
+
+const inputClass = 'w-16 text-center tabular-nums';
 
 function clampInt(value: string, min: number, fallback: number): number {
   const n = parseInt(value);
@@ -26,15 +29,17 @@ export default function DiceRoller() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-ctp-text mb-1">Dice Roller</h2>
-      <p className="text-ctp-subtext1 mb-8">
+      <h2 className="text-2xl font-semibold text-foreground mb-1">
+        Dice Roller
+      </h2>
+      <p className="text-muted-foreground mb-8">
         Roll and keep dice for any purpose.
       </p>
 
-      <div className="bg-ctp-mantle rounded-xl border border-ctp-surface0 p-6 flex flex-col gap-5 max-w-md">
+      <Card className="p-6 flex flex-col gap-5 max-w-md">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm text-ctp-subtext1">Roll</span>
-          <input
+          <span className="text-sm text-muted-foreground">Roll</span>
+          <Input
             type="number"
             min={1}
             value={count}
@@ -45,16 +50,16 @@ export default function DiceRoller() {
             }}
             className={inputClass}
           />
-          <span className="text-sm text-ctp-subtext1">d</span>
-          <input
+          <span className="text-sm text-muted-foreground">d</span>
+          <Input
             type="number"
             min={2}
             value={sides}
             onChange={(e) => setSides(clampInt(e.target.value, 2, 2))}
             className={inputClass}
           />
-          <span className="text-sm text-ctp-subtext1">+</span>
-          <input
+          <span className="text-sm text-muted-foreground">+</span>
+          <Input
             type="number"
             value={modifier}
             onChange={(e) => setModifier(parseInt(e.target.value) || 0)}
@@ -68,15 +73,15 @@ export default function DiceRoller() {
               type="checkbox"
               checked={keepAll}
               onChange={(e) => setKeepAll(e.target.checked)}
-              className="w-4 h-4 rounded accent-ctp-mauve cursor-pointer"
+              className="w-4 h-4 rounded accent-primary cursor-pointer"
             />
-            <span className="text-sm text-ctp-text">Keep all</span>
+            <span className="text-sm text-foreground">Keep all</span>
           </label>
 
           {!keepAll && (
             <div className="flex items-center gap-2 pl-6">
-              <span className="text-sm text-ctp-subtext1">Keep</span>
-              <input
+              <span className="text-sm text-muted-foreground">Keep</span>
+              <Input
                 type="number"
                 min={1}
                 max={count}
@@ -89,7 +94,7 @@ export default function DiceRoller() {
               <select
                 value={keepBest ? 'best' : 'worst'}
                 onChange={(e) => setKeepBest(e.target.value === 'best')}
-                className="bg-ctp-surface0 border border-ctp-surface2 text-ctp-text rounded-lg px-3 py-1.5 focus:outline-none focus:border-ctp-mauve"
+                className="bg-secondary border border-input text-foreground rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary"
               >
                 <option value="best">best</option>
                 <option value="worst">worst</option>
@@ -98,13 +103,10 @@ export default function DiceRoller() {
           )}
         </div>
 
-        <button
-          onClick={handleRoll}
-          className="self-start bg-ctp-mauve hover:bg-ctp-pink text-ctp-base font-semibold rounded-lg px-5 py-2 transition-colors cursor-pointer"
-        >
+        <Button onClick={handleRoll} className="self-start">
           🎲 Roll Dice
-        </button>
-      </div>
+        </Button>
+      </Card>
 
       {result && (
         <div className="mt-6">

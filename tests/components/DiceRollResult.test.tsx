@@ -6,7 +6,7 @@ import type { RollResult } from '../../src/utils/dice';
 // The total lives in the mauve element; individual dice live in green/gray spans.
 // We query the total via its distinct container class to avoid matching a die value.
 function getTotal(container: HTMLElement): string | null {
-  const total = container.querySelector('div.bg-ctp-mauve');
+  const total = container.querySelector('div.bg-primary');
   return total ? total.textContent : null;
 }
 

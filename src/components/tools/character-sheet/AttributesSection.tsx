@@ -78,26 +78,26 @@ function performRoll(method: AttributeMethod): RolledScore {
 function RollTooltip({ score }: { score: RolledScore }) {
   const sortedDice = [...score.allDice].sort((a, b) => b - a);
   return (
-    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-ctp-surface1 border border-ctp-surface2 rounded-lg px-2 py-1.5 z-20 pointer-events-none flex gap-1 items-center shadow-lg whitespace-nowrap">
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-secondary border rounded-lg px-2 py-1.5 z-20 pointer-events-none flex gap-1 items-center shadow-lg whitespace-nowrap">
       {sortedDice.map((die, i) =>
         i < score.numKept ? (
           <span
             key={i}
-            className="bg-ctp-green text-ctp-base rounded px-1.5 py-0.5 text-xs font-bold"
+            className="rounded px-1.5 py-0.5 text-xs font-bold bg-[--success] text-[--success-foreground]"
           >
             {die}
           </span>
         ) : (
           <span
             key={i}
-            className="text-ctp-subtext0 line-through text-xs px-0.5"
+            className="text-muted-foreground line-through text-xs px-0.5"
           >
             {die}
           </span>
         ),
       )}
       {score.modifier > 0 && (
-        <span className="text-ctp-subtext1 text-xs ml-0.5">
+        <span className="text-muted-foreground text-xs ml-0.5">
           +{score.modifier}
         </span>
       )}
@@ -204,8 +204,8 @@ export default function AttributesSection({
   }
 
   return (
-    <section className="bg-ctp-mantle rounded-xl border border-ctp-surface0 p-6 flex flex-col gap-4">
-      <h3 className="text-lg font-semibold text-ctp-text">Attributes</h3>
+    <section className="bg-card rounded-xl border p-6 flex flex-col gap-4">
+      <h3 className="text-lg font-semibold text-foreground">Attributes</h3>
 
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-6 flex flex-col gap-1">
@@ -232,7 +232,7 @@ export default function AttributesSection({
             <div className="flex items-center gap-3">
               <button
                 onClick={handleRollAll}
-                className="bg-ctp-mauve hover:bg-ctp-pink text-ctp-base font-semibold rounded-lg px-4 py-2 transition-colors cursor-pointer text-sm"
+                className="bg-primary hover:opacity-90 text-primary-foreground font-semibold rounded-lg px-4 py-2 transition-opacity cursor-pointer text-sm"
               >
                 🎲 Roll
               </button>
@@ -257,8 +257,8 @@ export default function AttributesSection({
                       className={[
                         'relative flex items-center justify-center w-10 h-10 rounded-lg border text-sm font-bold select-none',
                         available
-                          ? 'bg-ctp-surface0 border-ctp-surface2 text-ctp-text cursor-grab active:cursor-grabbing'
-                          : 'bg-ctp-surface0 border-ctp-surface1 text-ctp-subtext0 opacity-40 cursor-not-allowed',
+                          ? 'bg-secondary border text-foreground cursor-grab active:cursor-grabbing'
+                          : 'bg-secondary border text-muted-foreground opacity-40 cursor-not-allowed',
                       ].join(' ')}
                     >
                       {score.value}
@@ -275,7 +275,11 @@ export default function AttributesSection({
           <div className="col-span-12 flex items-center gap-3">
             <span className={labelClass}>Points remaining:</span>
             <span
-              className={`text-sm font-bold ${pointBuyRemaining === 0 ? 'text-ctp-red' : 'text-ctp-green'}`}
+              className={`text-sm font-bold ${
+                pointBuyRemaining === 0
+                  ? 'text-destructive'
+                  : 'text-[--success]'
+              }`}
             >
               {pointBuyRemaining} / {POINT_BUY_TOTAL}
             </span>
@@ -286,7 +290,9 @@ export default function AttributesSection({
           <div className="col-span-12 flex items-center gap-3">
             <span className={labelClass}>ASIs remaining:</span>
             <span
-              className={`text-sm font-bold ${asiRemaining === 0 ? 'text-ctp-yellow' : 'text-ctp-green'}`}
+              className={`text-sm font-bold ${
+                asiRemaining === 0 ? 'text-[--warning]' : 'text-[--success]'
+              }`}
             >
               {asiRemaining} / {asiPool}
             </span>
@@ -311,8 +317,8 @@ export default function AttributesSection({
                     className={[
                       'flex items-center justify-center w-10 h-10 rounded-lg border text-sm font-bold select-none',
                       available
-                        ? 'bg-ctp-surface0 border-ctp-surface2 text-ctp-text cursor-grab active:cursor-grabbing'
-                        : 'bg-ctp-surface0 border-ctp-surface1 text-ctp-subtext0 opacity-40 cursor-not-allowed',
+                        ? 'bg-secondary border text-foreground cursor-grab active:cursor-grabbing'
+                        : 'bg-secondary border text-muted-foreground opacity-40 cursor-not-allowed',
                     ].join(' ')}
                   >
                     {value}
@@ -357,22 +363,20 @@ export default function AttributesSection({
                 onDragLeave={() => setDragOverKey(null)}
                 onDrop={(e) => handleAttrDrop(e, key)}
                 className={[
-                  'flex flex-col items-center bg-ctp-surface0 border rounded-xl p-3 gap-1 cursor-grab active:cursor-grabbing transition-colors',
-                  isOver
-                    ? 'border-ctp-mauve bg-ctp-surface1'
-                    : 'border-ctp-surface1',
+                  'flex flex-col items-center bg-secondary border rounded-xl p-3 gap-1 cursor-grab active:cursor-grabbing transition-colors',
+                  isOver ? 'border-primary bg-accent' : 'border-border',
                 ].join(' ')}
               >
-                <h3 className="text-xs font-semibold text-ctp-subtext1 uppercase tracking-wider">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   {label}
                 </h3>
-                <div className="text-3xl font-bold text-ctp-text w-10 text-center">
+                <div className="text-3xl font-bold text-foreground w-10 text-center">
                   {finalScore}
                 </div>
-                <div className="text-base font-semibold text-ctp-mauve">
+                <div className="text-base font-semibold text-primary">
                   {modifier(finalScore)}
                 </div>
-                <div className="w-full border-t border-ctp-surface2 mt-1 pt-2 flex flex-col gap-1">
+                <div className="w-full border-t border-border mt-1 pt-2 flex flex-col gap-1">
                   <ChangeableRow
                     label="Base"
                     value={base}

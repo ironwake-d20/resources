@@ -3,7 +3,7 @@ import type { KaiLevel } from '../../../campaigns/types';
 import { selectClass } from './styles';
 
 const outOfSyncClass =
-  'w-full bg-ctp-surface0 border border-ctp-red text-ctp-red rounded-lg px-3 py-1.5 focus:outline-none focus:border-ctp-red text-left flex items-center justify-between gap-2';
+  'w-full bg-secondary border border-destructive text-destructive rounded-lg px-3 py-1.5 focus:outline-none focus:border-destructive text-left flex items-center justify-between gap-2';
 
 interface Props {
   kaiName: string;
@@ -44,7 +44,7 @@ export default function KaiLevelSelect({
             : selectClass + ' text-left flex items-center justify-between gap-2'
         }
       >
-        <span className={selected ? '' : 'text-ctp-subtext0'}>
+        <span className={selected ? '' : 'text-muted-foreground'}>
           {selected
             ? `${selected.level} – ${selected.name}`
             : `Select a ${kaiName} level`}
@@ -53,7 +53,7 @@ export default function KaiLevelSelect({
       </button>
 
       {open && (
-        <ul className="absolute z-10 w-full mt-1 bg-ctp-surface0 border border-ctp-surface2 rounded-lg overflow-hidden shadow-lg">
+        <ul className="absolute z-10 w-full mt-1 bg-secondary border rounded-lg overflow-hidden shadow-lg">
           {kaiLevels.map((k) => (
             <li key={k.level}>
               <button
@@ -62,7 +62,7 @@ export default function KaiLevelSelect({
                   onChange(String(k.level));
                   setOpen(false);
                 }}
-                className="w-full text-left px-3 py-1.5 text-sm text-ctp-text hover:bg-ctp-surface1 transition-colors"
+                className="w-full text-left px-3 py-1.5 text-sm text-foreground hover:bg-accent transition-colors"
               >
                 {k.level} – {k.name} (max lvl {k.maxLevel})
               </button>

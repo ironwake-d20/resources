@@ -4,7 +4,7 @@ import DiceRoller from '../../../src/components/tools/DiceRoller';
 
 function getTotal(container: HTMLElement): string | null {
   // The total lives in a div, not the button.
-  const total = container.querySelector('div.bg-ctp-mauve');
+  const total = container.querySelector('div.bg-primary');
   return total ? total.textContent : null;
 }
 

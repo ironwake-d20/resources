@@ -24,7 +24,7 @@ pnpm format:check # CI format check
 ```
 src/
   components/
-    layout/       # AppHeader, AppFooter, Sidebar
+    layout/       # Sidebar
     tools/        # One file per tool (e.g. DiceRoller)
   components/     # Shared components (e.g. DiceRollResult)
   utils/          # Pure logic (e.g. dice.ts)

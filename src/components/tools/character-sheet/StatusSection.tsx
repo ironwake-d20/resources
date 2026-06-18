@@ -41,7 +41,7 @@ interface Props {
 }
 
 const rowButtonClass =
-  'flex items-center justify-center w-7 h-7 rounded bg-ctp-surface1 border border-ctp-surface2 text-ctp-subtext1 hover:text-ctp-text hover:bg-ctp-surface2 transition-colors text-sm font-bold cursor-pointer select-none disabled:opacity-30 disabled:cursor-not-allowed';
+  'flex items-center justify-center w-7 h-7 rounded bg-secondary border text-muted-foreground hover:text-foreground hover:bg-accent transition-colors text-sm font-bold cursor-pointer select-none disabled:opacity-30 disabled:cursor-not-allowed';
 
 function ManaCard({
   max,
@@ -66,24 +66,26 @@ function ManaCard({
 }) {
   if (!enabled) {
     return (
-      <div className="flex flex-col items-center bg-ctp-surface0 border border-ctp-surface1 rounded-xl p-4 gap-2 opacity-50">
-        <h4 className="text-xs font-semibold text-ctp-subtext1 uppercase tracking-wider">
+      <div className="flex flex-col items-center bg-secondary border rounded-xl p-4 gap-2 opacity-50">
+        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Mana
         </h4>
-        <div className="text-3xl font-bold text-ctp-overlay0 tabular-nums">
+        <div className="text-3xl font-bold text-muted-foreground tabular-nums">
           —
         </div>
       </div>
     );
   }
   return (
-    <div className="flex flex-col items-center bg-ctp-surface0 border border-ctp-surface1 rounded-xl p-4 gap-2">
-      <h4 className="text-xs font-semibold text-ctp-subtext1 uppercase tracking-wider">
+    <div className="flex flex-col items-center bg-secondary border rounded-xl p-4 gap-2">
+      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
         Mana
       </h4>
-      <div className="text-3xl font-bold text-ctp-text tabular-nums">
+      <div className="text-3xl font-bold text-foreground tabular-nums">
         {current}
-        <span className="text-ctp-subtext0 text-xl font-medium">/{max}</span>
+        <span className="text-muted-foreground text-xl font-medium">
+          /{max}
+        </span>
       </div>
       <div className="flex items-center gap-2">
         <button
@@ -101,7 +103,7 @@ function ManaCard({
           +
         </button>
       </div>
-      <div className="w-full border-t border-ctp-surface2 mt-1 pt-2 flex flex-col gap-1 text-xs text-ctp-subtext1">
+      <div className="w-full border-t border-border mt-1 pt-2 flex flex-col gap-1 text-xs text-muted-foreground">
         <ConstantRow label="Base" value={10 * level} signed={false} />
         <ChangeableRow
           label="Condition"
@@ -142,13 +144,15 @@ function VitalityCard({
 }) {
   const rollsTotal = rolls.reduce((a, b) => a + b, 0);
   return (
-    <div className="flex flex-col items-center bg-ctp-surface0 border border-ctp-surface1 rounded-xl p-4 gap-2">
-      <h4 className="text-xs font-semibold text-ctp-subtext1 uppercase tracking-wider">
+    <div className="flex flex-col items-center bg-secondary border rounded-xl p-4 gap-2">
+      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
         Vitality
       </h4>
-      <div className="text-3xl font-bold text-ctp-text tabular-nums">
+      <div className="text-3xl font-bold text-foreground tabular-nums">
         {current}
-        <span className="text-ctp-subtext0 text-xl font-medium">/{max}</span>
+        <span className="text-muted-foreground text-xl font-medium">
+          /{max}
+        </span>
       </div>
       <div className="flex items-center gap-2">
         <button
@@ -166,7 +170,7 @@ function VitalityCard({
           +
         </button>
       </div>
-      <div className="w-full border-t border-ctp-surface2 mt-1 pt-2 flex flex-col gap-1 text-xs text-ctp-subtext1">
+      <div className="w-full border-t border-border mt-1 pt-2 flex flex-col gap-1 text-xs text-muted-foreground">
         <ConstantRow label="Base" value={1} signed={false} />
         <ChangeableRow
           label="Condition"
@@ -178,14 +182,14 @@ function VitalityCard({
           value={rollsTotal}
           tooltip={
             <div className="flex flex-col gap-1">
-              <span className="text-[10px] text-ctp-subtext0">
+              <span className="text-[10px] text-muted-foreground">
                 {level}d4 rolls
               </span>
               <div className="flex gap-1">
                 {rolls.map((r, i) => (
                   <span
                     key={i}
-                    className="bg-ctp-mantle rounded px-1.5 py-0.5 text-xs font-bold text-ctp-text"
+                    className="bg-card rounded px-1.5 py-0.5 text-xs font-bold text-foreground"
                   >
                     {r}
                   </span>
@@ -222,13 +226,15 @@ function WoundsCard({
 }) {
   const max = Math.max(1, base + kaiBonus + classBonus + condition);
   return (
-    <div className="flex flex-col items-center bg-ctp-surface0 border border-ctp-surface1 rounded-xl p-4 gap-2">
-      <h4 className="text-xs font-semibold text-ctp-subtext1 uppercase tracking-wider">
+    <div className="flex flex-col items-center bg-secondary border rounded-xl p-4 gap-2">
+      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
         Wounds
       </h4>
-      <div className="text-3xl font-bold text-ctp-text tabular-nums">
+      <div className="text-3xl font-bold text-foreground tabular-nums">
         {current}
-        <span className="text-ctp-subtext0 text-xl font-medium">/{max}</span>
+        <span className="text-muted-foreground text-xl font-medium">
+          /{max}
+        </span>
       </div>
       <div className="flex items-center gap-2">
         <button
@@ -246,7 +252,7 @@ function WoundsCard({
           +
         </button>
       </div>
-      <div className="w-full border-t border-ctp-surface2 mt-1 pt-2 flex flex-col gap-1 text-xs text-ctp-subtext1">
+      <div className="w-full border-t border-border mt-1 pt-2 flex flex-col gap-1 text-xs text-muted-foreground">
         <ConstantRow label="Base" value={base} signed={false} />
         <ChangeableRow
           label="Condition"
@@ -304,17 +310,17 @@ function StabilisationCircles({
           const disabled = !canToggle;
           const isToggled = state !== 'empty';
 
-          let bg = 'bg-ctp-surface1 border-ctp-surface2';
+          let bg = 'bg-secondary border-border';
           let content: React.ReactNode = '';
           if (state === 'success') {
-            bg = 'bg-ctp-green border-ctp-green';
+            bg = 'bg-[--success] border-[--success]';
             content = (
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="3"
-                className="w-3.5 h-3.5 text-ctp-base"
+                className="w-3.5 h-3.5 text-[--success-foreground]"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
@@ -322,14 +328,14 @@ function StabilisationCircles({
               </svg>
             );
           } else if (state === 'failed') {
-            bg = 'bg-ctp-red border-ctp-red';
+            bg = 'bg-destructive border-destructive';
             content = (
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="3"
-                className="w-3.5 h-3.5 text-ctp-base"
+                className="w-3.5 h-3.5 text-destructive-foreground"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
@@ -365,7 +371,7 @@ function StabilisationCircles({
       <button
         onClick={onReset}
         disabled={checks.every((c) => c === 'empty')}
-        className="ml-2 px-2 py-1 text-xs font-semibold rounded bg-ctp-surface1 border border-ctp-surface2 text-ctp-subtext1 hover:text-ctp-text hover:bg-ctp-surface2 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+        className="ml-2 px-2 py-1 text-xs font-semibold rounded bg-secondary border text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
       >
         Reset
       </button>
@@ -408,12 +414,12 @@ export default function StatusSection({
   onStabilisationChecksReset,
 }: Props) {
   return (
-    <section className="bg-ctp-mantle rounded-xl border border-ctp-surface0 p-6 flex flex-col gap-4">
+    <section className="bg-card rounded-xl border p-6 flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-ctp-text">Status</h3>
+        <h3 className="text-lg font-semibold text-foreground">Status</h3>
         <button
           onClick={onVitalityRerollAll}
-          className="text-xs font-semibold rounded-lg bg-ctp-surface0 border border-ctp-surface1 px-3 py-1.5 text-ctp-subtext1 hover:text-ctp-text hover:bg-ctp-surface1 transition-colors cursor-pointer"
+          className="text-xs font-semibold rounded-lg bg-secondary border px-3 py-1.5 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer"
         >
           🎲 Roll Vitality
         </button>
@@ -455,8 +461,8 @@ export default function StatusSection({
         />
       </div>
 
-      <div className="flex items-center justify-between bg-ctp-surface0 border border-ctp-surface1 rounded-xl p-4">
-        <h4 className="text-xs font-semibold text-ctp-subtext1 uppercase tracking-wider">
+      <div className="flex items-center justify-between bg-secondary border rounded-xl p-4">
+        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Overdraw events
         </h4>
         <div className="flex items-center gap-2">
@@ -467,7 +473,7 @@ export default function StatusSection({
           >
             -
           </button>
-          <span className="text-2xl font-bold text-ctp-text w-10 text-center tabular-nums">
+          <span className="text-2xl font-bold text-foreground w-10 text-center tabular-nums">
             {overdrawEvents}
           </span>
           <button
@@ -478,8 +484,8 @@ export default function StatusSection({
           </button>
         </div>
       </div>
-      <div className="flex items-center justify-between bg-ctp-surface0 border border-ctp-surface1 rounded-xl p-4">
-        <h4 className="text-xs font-semibold text-ctp-subtext1 uppercase tracking-wider">
+      <div className="flex items-center justify-between bg-secondary border rounded-xl p-4">
+        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Stabilisation checks
         </h4>
         <StabilisationCircles
