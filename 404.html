@@ -10,7 +10,7 @@
         sessionStorage.redirect || location.pathname + location.search;
       sessionStorage.redirect = path;
       location.replace(
-        '/resources' + '?_gh_spa_redirect=' + encodeURIComponent(path),
+        '/resources/' + '?_gh_spa_redirect=' + encodeURIComponent(path),
       );
     </script>
   </head>
